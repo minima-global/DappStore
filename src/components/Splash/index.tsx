@@ -3,6 +3,7 @@ import Button from '../UI/Button';
 import { useEffect } from 'react';
 import Lottie from 'lottie-react';
 import splashJson from '../../splash.json';
+import mobileSplash from '../../splash_mobile.json';
 
 const Splash = () => {
   const { display, dismiss } = useSplash();
@@ -17,8 +18,11 @@ const Splash = () => {
 
   return (
     <div className="fixed top-0 left-0 bg-black z-50 w-screen h-screen flex flex-col px-8 pb-12">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto hidden lg:block">
         <Lottie animationData={splashJson} />
+      </div>
+      <div className="mx-auto block lg:hidden">
+        <Lottie animationData={mobileSplash} />
       </div>
       <div className="max-w-lg mx-auto text-center">
         <div className="text-3xl mb-6">
