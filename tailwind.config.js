@@ -16,6 +16,7 @@ export default {
       emerald: colors.emerald,
       indigo: colors.indigo,
       yellow: colors.yellow,
+      'primary': '#31CEFF',
       'core-black-contrast-2': '#282B2E',
     },
     extend: {

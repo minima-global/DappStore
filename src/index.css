@@ -137,6 +137,9 @@ pre {
 .bg-core-grey-20 {
   background-color: var(--core-grey-20);
 }
+.bg-core-grey-80 {
+  background-color: var(--core-grey-80);
+}
 
 @media screen and (min-width: 768px) {
   .lg\:core-black-100 {

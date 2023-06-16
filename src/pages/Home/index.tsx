@@ -1,17 +1,8 @@
-import { useContext, useState } from 'react';
-import FullStatus from './FullStatus';
-import Block from '../../components/UI/Block';
-import { appContext } from '../../AppContext';
 import TitleBar from '../../components/TitleBar';
-import MenuItem from '../../components/UI/MenuItem';
-import ChainStatus from './ChainStatus';
-import NodeStatus from '../../components/NodeStatus';
-import translation from '../../../translation.json';
 import Sort from '../../components/TitleBar/Sort';
+import { Link } from "react-router-dom";
 
 function Home() {
-  const { statusData, maxContactData, maxContactStats } = useContext(appContext);
-
   return (
     <div className="relative app text-white">
       <div>
@@ -20,10 +11,10 @@ function Home() {
           <img alt="Banner" src="./assets/banner.svg" />
           <h1 className="text-lg">My stores</h1>
           <div className="grid grid-cols-12">
-            <div className="col-span-6">
+            <div className="col-span-5">
               <Sort />
             </div>
-            <div className="col-span-6 flex items-center justify-end gap-4">
+            <div className="col-span-7 flex items-center justify-end gap-4">
               <svg
                 // onClick={openSearch}
                 className="cursor-pointer"
@@ -64,10 +55,10 @@ function Home() {
               </svg>
             </div>
           </div>
-          <div className="overflow-hidden flex-grow lg:px-0">
-            <div className="bg-core-black-contrast-2 rounded overflow-hidden flex items-center justify-start h-full">
+          <Link to="/store" className="overflow-hidden flex-grow lg:px-0">
+            <div className="bg-core-black-contrast-2 rounded overflow-hidden flex items-stretch justify-start h-full">
               <div
-                className="w-[96px] h-[72px] grow rounded bg-cover mx-auto"
+                className="w-[64px] h-[64px] min-w-[64px] grow rounded bg-cover mx-auto"
                 style={{
                   backgroundImage: `url('./assets/app.png')`,
                 }}
@@ -77,7 +68,7 @@ function Home() {
                 <p className="text-xs text-core-grey-80 text-ellipsis truncate">Minima Global</p>
               </div>
             </div>
-          </div>
+          </Link>
           <div className="text-center mt-16">
             <div className="text-lg mb-6">You haven’t added a store yet</div>
             <button className="border border-white h-[48px] max-w-[172px] w-full rounded">Add a store</button>
