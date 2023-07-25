@@ -3,9 +3,10 @@ import * as React from 'react';
 type ButtonProps = {
   variant?: 'primary' | 'secondary' | 'contrast-2';
   onClick?: () => void;
+  disabled?: boolean;
 };
 
-const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({ variant = 'primary', onClick = undefined, children }) => {
+const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({ disabled = false, variant = 'primary', onClick = undefined, children }) => {
   let base = 'w-full px-4 py-3.5 rounded font-bold disabled:opacity-40 disabled:cursor-not-allowed';
 
   if (variant === 'primary') {
@@ -17,7 +18,7 @@ const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({ variant = 'pri
   }
 
   return (
-    <button className={base} onClick={onClick}>
+    <button disabled={disabled} className={base} onClick={onClick}>
       {children}
     </button>
   );

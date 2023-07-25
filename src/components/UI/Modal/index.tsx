@@ -29,11 +29,6 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
                   className="modal mb-8 text-white core-black-contrast-2 box-shadow-lg rounded p-8 mx-auto relative overflow-hidden"
                 >
                   {children}
-                  <div className="hidden lg:block w-full z-50 mt-8">
-                    <Button variant="secondary" onClick={closeAtBottom}>
-                      Close
-                    </Button>
-                  </div>
                 </animated.div>
               </div>
               {closeAtBottom && (

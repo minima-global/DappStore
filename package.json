@@ -27,6 +27,7 @@
     "react-clipboard.js": "^2.0.16",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.2",
+    "react-slide-routes": "^3.0.3",
     "react-spring": "^9.7.1",
     "vite-plugin-html": "^3.2.0"
   },

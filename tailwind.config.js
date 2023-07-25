@@ -17,7 +17,12 @@ export default {
       indigo: colors.indigo,
       yellow: colors.yellow,
       'primary': '#31CEFF',
+      'status-red': '#FF627E',
+      'core-black-contrast-1': '#17191C',
       'core-black-contrast-2': '#282B2E',
+      'core-black-contrast-3': '#464C4F',
+      'core-grey-60': '#BDBDC4',
+      'core-grey-5': '#F9F9FA',
     },
     extend: {
       backgroundImage: {
