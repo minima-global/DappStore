@@ -1,12 +1,32 @@
 import TitleBarBack from '../../components/TitleBarBack';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useContext, useEffect, useState } from "react";
+import { appContext } from "../../AppContext";
+import official from '../../utilities/official_dapps.json';
+import pandaStore from '../../panda_dapps.json';
 
 function Store() {
+  const [data, setData] = useState(null);
+  const { repositories } = useContext(appContext);
+  const params = useParams();
+  const repository = repositories.find(i => i.ID === params.id);
+
+  useEffect(() => {
+    if (repository && !data) {
+      if (params.id === '1') {
+        setData(official);
+      }
+      if (params.id === '2') {
+        setData(pandaStore);
+      }
+    }
+  }, repository);
+
   return (
-    <div className="relative app text-white">
-      <div>
-        <TitleBarBack label="Store Name">
-          <div className="cursor-pointer active:scale-90 absolute right-0 relative w-[36px] h-[36px] rounded-full bg-core-black-contrast-2 flex items-center justify-center">
+    <div className="relative app text-white overflow-hidden inline-grid">
+      <div className="overflow-hidden">
+        <TitleBarBack label="Back">
+          <div className="hidden cursor-pointer active:scale-90 absolute right-0 relative w-[36px] h-[36px] rounded-full bg-core-black-contrast-2 flex items-center justify-center">
             <svg
               className="mr-1"
               width="17"
@@ -21,14 +41,16 @@ function Store() {
               />
             </svg>
           </div>
-          <div className="cursor-pointer active:scale-90 absolute right-0 relative w-[36px] h-[36px] rounded-full bg-core-black-contrast-2 flex items-center justify-center">
-            <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M3.30771 18.5C2.80899 18.5 2.38303 18.3117 2.02983 17.9352C1.67661 17.5586 1.5 17.1045 1.5 16.5729V3.04211H0.5V1.44304H4.99999V0.5H11V1.44304H15.5V3.04211H14.5V16.5729C14.5 17.1114 14.325 17.5672 13.975 17.9403C13.625 18.3134 13.1974 18.5 12.6923 18.5H3.30771ZM13 3.04211H2.99998V16.5729C2.99998 16.6686 3.02883 16.7472 3.08653 16.8087C3.14423 16.8702 3.21796 16.9009 3.30771 16.9009H12.6923C12.7692 16.9009 12.8397 16.8668 12.9039 16.7984C12.968 16.7301 13 16.6549 13 16.5729V3.04211ZM5.40387 14.7688H6.90385V5.17424H5.40387V14.7688ZM9.09615 14.7688H10.5961V5.17424H9.09615V14.7688Z"
-                fill="#A7A7B0"
-              />
-            </svg>
-          </div>
+          {params.id !== '1' && (
+            <div className="cursor-pointer active:scale-90 absolute right-0 relative w-[36px] h-[36px] rounded-full bg-core-black-contrast-2 flex items-center justify-center">
+              <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M3.30771 18.5C2.80899 18.5 2.38303 18.3117 2.02983 17.9352C1.67661 17.5586 1.5 17.1045 1.5 16.5729V3.04211H0.5V1.44304H4.99999V0.5H11V1.44304H15.5V3.04211H14.5V16.5729C14.5 17.1114 14.325 17.5672 13.975 17.9403C13.625 18.3134 13.1974 18.5 12.6923 18.5H3.30771ZM13 3.04211H2.99998V16.5729C2.99998 16.6686 3.02883 16.7472 3.08653 16.8087C3.14423 16.8702 3.21796 16.9009 3.30771 16.9009H12.6923C12.7692 16.9009 12.8397 16.8668 12.9039 16.7984C12.968 16.7301 13 16.6549 13 16.5729V3.04211ZM5.40387 14.7688H6.90385V5.17424H5.40387V14.7688ZM9.09615 14.7688H10.5961V5.17424H9.09615V14.7688Z"
+                  fill="#A7A7B0"
+                />
+              </svg>
+            </div>
+          )}
         </TitleBarBack>
         <div className="relative pt-2 p-4 flex flex-col gap-4 max-w-xl mx-auto">
           <div className="h-[140px] w-full bg-[#0595E7] rounded relative flex">
@@ -38,76 +60,57 @@ function Store() {
               <div className="node w-[8px] h-[8px] bg-core-grey-80 rounded-full" />
             </div>
           </div>
-          <div className="bg-core-black-contrast-2 rounded p-4">
-            <h5 className="pb-3 -mt-0.5">About</h5>
-            <p className="text-xs text-core-grey-20 mb-3">
-              Lorem ipsum dolor sit amet consectetur. Tortor ridiculus nisl mollis est. Diam rutrum adipiscing nunc
-              dignissim massa egestas sit. Ac ac ultrices id malesuada eget proin morbi adipiscing. Imperdiet duis eu
-              facilisis sapien in ultricies proin
-            </p>
-            <p className="text-xs">Read more</p>
-          </div>
+          {data && (
+            <div className="bg-core-black-contrast-2 rounded p-4">
+              <h5 className="pb-3 -mt-0.5">About</h5>
+              <p className="text-sm text-core-grey-20">
+                {data.description}
+              </p>
+              {/*<p className="text-xs">Read more</p>*/}
+            </div>
+          )}
 
-          <div className="cursor-pointer text-right text-primary flex gap-3 items-center justify-end">
-            Install all
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M2.3077 15.9997C1.80257 15.9997 1.375 15.8247 1.025 15.4747C0.675 15.1247 0.5 14.6971 0.5 14.192V11.4997H1.99997V14.192C1.99997 14.2689 2.03202 14.3394 2.09612 14.4036C2.16024 14.4677 2.23077 14.4997 2.3077 14.4997H13.6922C13.7692 14.4997 13.8397 14.4677 13.9038 14.4036C13.9679 14.3394 14 14.2689 14 14.192V11.4997H15.5V14.192C15.5 14.6971 15.325 15.1247 14.975 15.4747C14.625 15.8247 14.1974 15.9997 13.6922 15.9997H2.3077ZM7.99997 12.1151L3.7308 7.84588L4.78462 6.76131L7.25 9.22668V0.82666H8.74995V9.22668L11.2153 6.76131L12.2691 7.84588L7.99997 12.1151Z"
-                fill="#31CEFF"
-              />
-            </svg>
-          </div>
+          {/*<div className="cursor-pointer text-right text-primary flex gap-3 items-center justify-end">*/}
+          {/*  Install all*/}
+          {/*  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">*/}
+          {/*    <path*/}
+          {/*      d="M2.3077 15.9997C1.80257 15.9997 1.375 15.8247 1.025 15.4747C0.675 15.1247 0.5 14.6971 0.5 14.192V11.4997H1.99997V14.192C1.99997 14.2689 2.03202 14.3394 2.09612 14.4036C2.16024 14.4677 2.23077 14.4997 2.3077 14.4997H13.6922C13.7692 14.4997 13.8397 14.4677 13.9038 14.4036C13.9679 14.3394 14 14.2689 14 14.192V11.4997H15.5V14.192C15.5 14.6971 15.325 15.1247 14.975 15.4747C14.625 15.8247 14.1974 15.9997 13.6922 15.9997H2.3077ZM7.99997 12.1151L3.7308 7.84588L4.78462 6.76131L7.25 9.22668V0.82666H8.74995V9.22668L11.2153 6.76131L12.2691 7.84588L7.99997 12.1151Z"*/}
+          {/*      fill="#31CEFF"*/}
+          {/*    />*/}
+          {/*  </svg>*/}
+          {/*</div>*/}
 
-          <div className="overflow-hidden flex-grow lg:px-0 flex flex-col gap-2">
-            <Link to="/app">
-              <div className="bg-core-black-contrast-2 rounded overflow-hidden flex justify-start items-stretch h-full">
-                <div
-                  className="w-[64px] h-[64px] min-w-[64px] grow rounded bg-cover mx-auto"
-                  style={{
-                    backgroundImage: `url('./assets/app.png')`,
-                  }}
-                />
-                <div className="bg-core-black-contrast-2 grow p-3 px-4 w-full overflow-hidden">
-                  <h5 className="font-bold mb-0.5">MiniDapp Name</h5>
-                  <p className="text-xs text-core-grey-80 text-ellipsis truncate">1.0.0</p>
-                </div>
-                <div className="pr-4 flex items-center">
-                  <button
-                    onClick={(evt) => {
-                      evt.preventDefault();
+          <div className="flex-grow lg:px-0 flex flex-col gap-2">
+            {data && data.dapps.map((app) => (
+              <Link to="/app">
+                <div className="bg-core-black-contrast-2 rounded flex justify-start items-left h-full">
+                  <div
+                    className="w-[66px] h-[64px] min-w-[64px] rounded bg-cover"
+                    style={{
+                      backgroundImage: `url('${app.icon}')`,
                     }}
-                    className={`active:scale-95 transition bg-core-grey-20 mx-auto text-sm text-center w-fit rounded text-black px-5 py-1.5 rounded-full`}
-                  >
-                    Install
-                  </button>
+                  />
+                  <p className="flex-grow flex items-center px-4 truncate overflow-hidden min-w-[0]">
+                    <div className="overflow-hidden truncate">
+                      <div className="text-ellipsis overflow-hidden whitespace-nowrap">
+                        {app.name}
+                      </div>
+                      <p className="text-xs text-core-grey-80 truncate overflow-hidden">{app.version}</p>
+                    </div>
+                  </p>
+                  <div className="pr-4 flex items-center justify-end">
+                    <button
+                      onClick={(evt) => {
+                        evt.preventDefault();
+                      }}
+                      className={`active:scale-95 transition bg-core-grey-20 mx-auto text-sm text-center w-fit rounded text-black px-5 py-1.5 rounded-full`}
+                    >
+                      Install
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </Link>
-
-            <Link to="/app">
-              <div className="bg-core-black-contrast-2 rounded overflow-hidden flex justify-start items-stretch h-full">
-                <div
-                  className="w-[64px] h-[64px] min-w-[64px] grow rounded bg-cover mx-auto"
-                  style={{
-                    backgroundImage: `url('./assets/app.png')`,
-                  }}
-                />
-                <div className="bg-core-black-contrast-2 grow p-3 px-4 w-full overflow-hidden">
-                  <h5 className="font-bold mb-0.5">MiniDapp Name</h5>
-                  <p className="text-xs text-core-grey-80 text-ellipsis truncate">1.0.0</p>
-                </div>
-                <div className="pr-4 flex items-center">
-                  <button
-                    onClick={(evt) => {
-                      evt.preventDefault();
-                    }}
-                    className={`active:scale-95 transition bg-core-grey-20 mx-auto text-sm text-center w-fit rounded text-black px-5 py-1.5 rounded-full`}
-                  >
-                    Install
-                  </button>
-                </div>
-              </div>
-            </Link>
+              </Link>
+            ))}
           </div>
         </div>
       </div>

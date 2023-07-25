@@ -15,8 +15,8 @@ function App() {
         <Splash />
         <SlideRoutes duration={150}>
           <Route path="/" element={<Home />} />
-          <Route path="/store" element={<Store />} />
-          <Route path="/app" element={<AppPage />} />
+          <Route path="/store/:id" element={<Store />} />
+          <Route path="/app/:id" element={<AppPage />} />
         </SlideRoutes>
         <BadgeNotification />
       </AppProvider>
