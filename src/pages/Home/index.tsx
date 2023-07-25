@@ -1,17 +1,37 @@
 import TitleBar from '../../components/TitleBar';
 import Sort from '../../components/TitleBar/Sort';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Modal from '../../components/UI/Modal';
 import Button from '../../components/UI/Button';
+import pandaApps from "../../panda_dapps.json";
+import { sql } from "../../lib";
+import { appContext } from "../../AppContext";
 
 function Home() {
+  const { loaded } = useContext(appContext);
   const [dappLink, setDAppLink] = useState('');
   const [query, setQuery] = useState('');
   const [displaySearch, setDisplaySearch] = useState(false);
   const [displayAddStore, setDisplayAddStore] = useState(false);
 
   const dappLinkHasError = dappLink !== '' && !/^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/.test(dappLink) && !dappLink.includes('.json');
+
+  useEffect(() => {
+    if (loaded.current) {
+      sql('SELECT * FROM repositories').then((response) => {
+        console.log(response);
+      });
+    }
+  }, [loaded.current]);
+
+  const addDappStore = () => {
+    if (dappLink.toLowerCase() === 'https://eurobuddha.com/panda_dapps/panda_dapps.json') {
+      sql(`INSERT INTO repositories (name, url) VALUES ('${pandaApps.name}', '${dappLink}')`).then((response) => {
+        console.log(response);
+      });
+    }
+  }
 
   return (
     <div className="relative app text-white">
@@ -26,7 +46,7 @@ function Home() {
                   type="text"
                   value={dappLink}
                   onChange={(evt) => setDAppLink(evt.target.value)}
-                  className={`outline-none bg-core-black-contrast-1 p-3 border-2 rounded w-full ${dappLinkHasError ? 'border-status-red' : 'border-core-black-contrast-3'}`}
+                  className={`pr-10 outline-none bg-core-black-contrast-1 p-3 border-2 rounded w-full ${dappLinkHasError ? 'border-status-red' : 'border-core-black-contrast-3'}`}
                 />
                 <div className="absolute px-1 h-full right-0 top-0 flex items-center justify-end">
                   <svg
@@ -52,7 +72,7 @@ function Home() {
               </div>
               {dappLinkHasError && <div className="text-status-red mt-4">Invalid URL</div>}
             </div>
-            <Button disabled={dappLinkHasError} variant="primary">Add store</Button>
+            <Button onClick={addDappStore} disabled={dappLinkHasError || dappLink === ''} variant="primary">Add store</Button>
             <Button onClick={() => setDisplayAddStore(false)} variant="secondary">
               Cancel
             </Button>

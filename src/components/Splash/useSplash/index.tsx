@@ -1,32 +1,28 @@
 import { useContext, useEffect, useState } from 'react';
 import { appContext } from '../../../AppContext';
-import { deleteFile, loadFile, saveFile } from '../../../lib';
+import { get, set } from "../../../lib";
 
 function useSplash() {
   const { loaded } = useContext(appContext);
-  const [display, setDisplay] = useState(true);
+  const [display, setDisplay] = useState(false);
 
   useEffect(() => {
     if (loaded.current) {
       (async () => {
-        const response = await loadFile('splash.json');
-
-        if (!response) {
-          setDisplay(true);
-        }
+        get('SPLASH').then((response) => {
+          if (response.value !== '1') {
+            setDisplay(true);
+          } else {
+            setDisplay(false);
+          }
+        });
       })();
-    }
-  }, [loaded]);
-
-  useEffect(() => {
-    if (loaded.current) {
-      window['reset'] = () => deleteFile('splash.json');
     }
   }, [loaded]);
 
   const dismiss = async () => {
     setDisplay(false);
-    await saveFile('splash.json', '1');
+    set('SPLASH', '1');
   };
 
   return {

@@ -1,12 +1,12 @@
 import './index.css';
+import SlideRoutes from "react-slide-routes";
+import { HashRouter, Route } from 'react-router-dom';
 import AppProvider from './AppContext';
 import Home from './pages/Home';
-import Splash from './components/Splash';
-import BadgeNotification from './components/BadgeNotification';
-import { HashRouter, Route, Routes } from 'react-router-dom';
 import Store from "./pages/Store";
 import AppPage from "./pages/AppPage";
-import SlideRoutes from "react-slide-routes";
+import Splash from './components/Splash';
+import BadgeNotification from './components/BadgeNotification';
 
 function App() {
   return (

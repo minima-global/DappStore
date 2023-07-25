@@ -1,0 +1,50 @@
+{
+    "name": "PandaDapps",
+    "description": "Unofficial Panda miniDapp Store",
+    "icon": "http://eurobuddha.com/panda_dapps/panda.jpg",
+    "version": "1.0",
+    "dapps": [
+        {
+            "file": "http://eurobuddha.com/panda_dapps/2048_103.1.zip",
+            "icon": "http://eurobuddha.com/panda_dapps/2048.png",
+            "name": "Powers of 2",
+            "description": "Powers of 2 puzzle",
+            "version": "1.0"
+        },
+        {
+            "file": "http://eurobuddha.com/panda_dapps/calcul8_103.1.zip",
+            "icon": "http://eurobuddha.com/panda_dapps/calc.jpg",
+            "name": "Calculator",
+            "description": "Add subtract multiply & divide!",
+            "version": "1.0"
+        },
+        {
+            "file": "http://eurobuddha.com/panda_dapps/Bip39_103.1.zip",
+            "icon": "http://eurobuddha.com/panda_dapps/bip39.png",
+            "name": "BIP39",
+            "description": "BIP39 Seed Generator",
+            "version": "1.0"
+        },
+        {
+            "file": "http://eurobuddha.com/panda_dapps/minibrain103.1.zip",
+            "icon": "http://eurobuddha.com/panda_dapps/brain.jpg",
+            "name": "Brain Wallet",
+            "description": "BTC/LTC Brainwallet Tool",
+            "version": "1.0"
+        },
+        {
+            "file": "http://eurobuddha.com/panda_dapps/breaklock103.1.zip",
+            "icon": "http://eurobuddha.com/panda_dapps/breaklock.png",
+            "name": "Breaklock",
+            "description": "Crack Phone Pattern Lock Game",
+            "version": "1.0"
+        },
+        {
+            "file": "http://eurobuddha.com/panda_dapps/alien103.zip",
+            "icon": "http://eurobuddha.com/panda_dapps/alien.png",
+            "name": "Alien Invasion",
+            "description": "Alien Invaders",
+            "version": "1.0"
+        }
+    ]
+}

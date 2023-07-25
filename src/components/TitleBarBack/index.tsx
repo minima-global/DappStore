@@ -2,7 +2,12 @@ import { FC, PropsWithChildren } from 'react';
 import useAndroidShowTitleBar from '../../hooks/useAndroidShowTitleBar';
 import { useNavigate } from "react-router-dom";
 
-const TitleBarBack: FC<PropsWithChildren> = ({ overrideBack, label, children }) => {
+type TitleBarBackProps = {
+  label: string;
+  overrideBack?: () => React.ReactNode;
+}
+
+const TitleBarBack: FC<PropsWithChildren<TitleBarBackProps>> = ({ overrideBack, label, children }) => {
   const openTitleBar = useAndroidShowTitleBar();
   const navigate = useNavigate();
 
