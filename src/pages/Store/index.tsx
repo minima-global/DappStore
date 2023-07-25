@@ -54,7 +54,7 @@ function Store() {
         </TitleBarBack>
         <div className="relative pt-2 p-4 flex flex-col gap-4 max-w-xl mx-auto">
           <div className="h-[140px] w-full bg-[#0595E7] rounded relative flex">
-            <div className="absolute bottom-0 p-3 left-0 right-0 flex justify-center gap-2 mx-auto">
+            <div className="hidden absolute bottom-0 p-3 left-0 right-0 flex justify-center gap-2 mx-auto">
               <div className="node w-[8px] h-[8px] bg-white rounded-full" />
               <div className="node w-[8px] h-[8px] bg-core-grey-80 rounded-full" />
               <div className="node w-[8px] h-[8px] bg-core-grey-80 rounded-full" />
