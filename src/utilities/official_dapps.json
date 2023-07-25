@@ -1,0 +1,185 @@
+{
+  "name":"Minima Global",
+  "description":"Official Minima DAPPs",
+  "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/minima_logo.png",
+  "version":"1.0",
+
+  "dapps":[
+    {
+      "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/miniswap-1.0.3.mds.zip",
+      "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/miniswap.png",
+      "name":"MiniSwap",
+      "description": "The cross-chain swap protocol. Exchange ERC20s and ETH for native MINIMA",
+      "version" : "1.0.3",
+      "about" : ["MiniSwap is a cross-chain swap protocol that enables you to trade ERC-20 tokens and ETH for native MINIMA between the Ethereum and Minima blockchains, peer-to-peer.\n\n","Requires both participants to run a Minima node and have a MetaMask wallet installed on their browser."],
+      "update" : ["- Metamask now pops up as expected when approving and locking an ERC-20 value of over 999."],
+      "date" : "Jun 05, 2023",
+      "history" :[
+        {"version": "1.0.0","file": "https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps_history/miniswap-1.0.mds.zip","update" : "Version 1.0 released on 22 May"}
+      ]
+    },
+    {
+      "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/filez-1.0.0.mds.zip",
+      "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/filez.png",
+      "name":"Filez",
+      "description": "A simple file manager",
+      "version" : "1.0.0",
+      "about" : ["Filez is a simple file manager that allows you to:\n\n","- Upload and download files between your phone and desktop\n\n","- Export backups or transactions to the MiniDapp by specifying the Filez path."],
+      "update" : [""],
+      "date" : "May 12, 2023",
+      "history" :[
+      ]
+    },
+    {
+      "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/chatter-1.1.1.mds.zip",
+      "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/chatter.png",
+      "name":"Chatter",
+      "description": "Social media and messaging over Maxima",
+      "version" : "1.1.1",
+      "about" : ["Chatter is a decentralized, scalable, and permissionless microblogging and social network MiniDapp.\n\n"," It allows users to share text, images, and basic HTML, or link audio and video files from the web to their Maxima contacts.\n\n","Re-chatting or replying to a post you receive will forward it onto your contacts, serving to spread the post further across the network.\n\n","There is no limit to how far a post could reach. Great chats will spread, but unpopular chats will not. \n\n","Not like Twitter, not like Facebook, not like TikTok… Chatter is its own thing."],
+      "update" : [],
+      "date" : "May 03, 2023",
+      "history" :[
+        {"version": "1.0.0","file": "https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps_history/chatter-1.0.0.mds.zip","update" : "Version released on 17 March"}
+      ]
+    },
+    {
+      "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/maximize-1.0.0.mds.zip",
+      "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/maximize.png",
+      "name":"Maximize",
+      "description": "Stake native Minima and earn yield",
+      "version" : "1.0.0",
+      "about" : ["Maximize is a non-custodial yield product.\n\n","","Earn a yield on your native Minima by staking for 1, 3, 6, 9 or 12 months.\n\n","","Open stakes will show in your Future Cash MiniDapp for the duration of the staking period."],
+      "update" : [""],
+      "date" : "Apr 10, 2023",
+      "history" :[
+      ]
+    },
+    {
+      "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/wallet-2.21.3.mds.zip",
+      "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/wallet.png",
+      "name":"Wallet",
+      "description": "Official Minima wallet",
+      "version" : "2.21.3",
+      "about" : ["The Wallet is where you can manage all the funds you own on the Minima blockchain.\n","DO NOT SEND FUNDS FROM OTHER CHAINS TO YOUR MINIMA ADDRESS, YOUR FUNDS WILL BE LOST.\n\n","","Using the Wallet MiniDapp, you can:\n\n","","- Check the balance of your Minima or any other Custom Tokens or NFTs you own\n","- Create your own Custom Tokens and NFTs. Enter a URL ending in .jpg, .jpeg or .png to give your tokens an image\n","- Share your Minima address with others for receiving $MINIMA, Custom Tokens or NFTs created on the Minima blockchain\n","- Send $MINIMA, Custom Tokens or NFTs created on the Minima blockchain to other Minima addresses\n","- Check the Status of your Minima node"],
+      "update" : ["- Reworked Transaction History\n","- added source_files folder and updated README\n"],
+      "date" : "May 15, 2023",
+      "history" :[
+        {"version": "2.17.1","file": "https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps_history/wallet_2.17.1.mds.zip","update" : ["- Transaction history\n", "- Vault lock status check on all forms\n","-  Check address feature locked supports only node version running 1.0.21+\n","- Internal browser first build\n","- Locked incompatible features on internal browser\n","- Bug fixes\n"]}
+      ]
+    },
+    {
+      "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/maxsolo-2.3.7.mds.zip",
+      "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/maxsolo.png",
+      "name":"MaxSolo",
+      "description": "P2P chat app running over Maxima",
+      "version" : "2.3.7",
+      "about" : ["MaxSolo is an encrypted, peer-to-peer messaging application, which uses Minima\u2019s information transfer layer, Maxima. Learn more about Maxima below.\n\n","","Using MaxSolo you can:\n\n","","- Send your Maxima Contacts messages, images and $MINIMA coins or Custom Tokens\/NFTs created on Minima\n","- Experience freedom of information\n\n","","To use MaxSolo, you must add your Maxima Contacts using the MaxContacts MiniDapp."],
+      "update" : ["- Starting a new chat on mobile now ensures that the keyboard does not overlap the contacts list\n", "- Updated styling"],
+      "date" : "Mar 17, 2023",
+      "history" :[
+        {"version": "2.2.12","file": "https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps_history/maxsolo_2.2.16.mds.zip","update" : "Notifications now showing correctly, Fix lastseen time"}
+      ]
+    },
+    {
+      "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/iprewards-2.16.1.mds.zip",
+      "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/IP_Payout_logo.png",
+      "name":"Incentive Program Rewards",
+      "description": "Request withdrawal of your Testnet Rewards",
+      "version" : "2.16.1",
+      "about" : ["Request withdrawal of your Incentive Program Rewards earned for running a node during Testnet.\n","Once processed, your Rewards will be sent to your Wallet.\n\n","BEFORE REQUESTING WITHDRAWAL OF YOUR REWARDS, PLEASE ENSURE:\n","1. You are running the Mainnet version of Minima\n","2. You have written down your Seed Phrase\n","3. You have taken a backup of your node (with no special characters in the backup password)\n","4. If you have encrypted your keys using the Vault command, please ensure you can unlock it and relock it\n"],
+      "update" : ["Now allows users to change their wallet address before payment."],
+      "date" : "Mar 16, 2023",
+      "history" :[
+        {"version": "2.15.1","file": "https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps_history/iprewards-2.15.1.mds.zip","update" : []}
+      ]
+    },
+    {
+      "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/block-2.0.3.mds.zip",
+      "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/block.png",
+      "name":"Block",
+      "description": "Explore the Minima blockchain",
+      "version" : "2.0.3",
+      "about" : "The Block Explorer lets you view the latest blocks and transactions on the Minima blockchain. \n Using the Block Explorer MiniDapp, you can: \n \n - Navigate through the Minima blockchain \n- Search by address or TxPoW ID - due to the pruning of the chain, only the last 1000 blocks will be visible \n- Select a block to view its details and the transactions in it \n \n Each block in the chain consists of a main transaction and a transaction list. \n \n When you select a block, you will see 3 tabs, Details, Inputs and Outputs. \n\n- Details: shows the block details, including its transaction list at the bottom. \n- Inputs: shows details for the coins used as inputs to the block’s main transaction (if one exists). \n- Outputs: shows the corresponding Outputs of the main transaction (if one exists).",
+      "date" : "May 15, 2023",
+      "update" : ["- Updated UI to reflect new branding\n","- Blocks are now loaded via an infinite list instead of using previous / next buttons"],
+      "history" :[
+        {"version": "0.1.5","file": "https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps_history/block-0.1.5.mds.zip","update" : ""}
+      ]
+    },
+    {
+      "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/futurecash_1.5.mds.zip",
+      "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/future.png",
+      "name":"Future Cash",
+      "description": "Send cash to the Future!",
+      "version" : "1.5",
+      "about" : "Lock up funds for yourself or for another to save, invest or secure, and unlock in the future.",
+      "update" : ["Now allows input for Vault password\n ","- Includes optional Burn\n"],
+      "date" : "Feb 06, 2023",
+      "history" :[
+      ]
+    },
+    {
+      "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/maxcontacts-1.3.4.mds.zip",
+      "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/maxcontacts.png",
+      "name":"MaxContacts",
+      "description": "Manage your Maxima contacts",
+      "version" : "1.3.4",
+      "about" : "Set your Maxima profile name and add, remove or share Maxima contact addresses.",
+      "update" : ["- Network and chain status showing correctly\n","- Names are no longer capitalised\n","- Copy bug fixed when copying a contact's address"],
+      "date" : "Feb 06, 2023",
+      "history" :[
+      ]
+    },
+    {
+      "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/scriptide-2.0.mds.zip",
+      "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/scriptide.png",
+      "name":"Script IDE",
+      "description": "Minima Script IDE",
+      "version" : "2.0",
+      "about" : ["Script IDE is an Integrated Development Environment for developers to easily write and test Minima scripts.\n\n","","Using Script IDE, you can:\n\n","","- Write, Clean and Save Minima scripts\n","- Test Minima scripts by running them to determine their result and script address\n","","Script IDE is best used on your Desktop interface. Minima scripts are written in Minima\u2019s KISS scripting language. Learn more by following the Transaction Tutorial in the Docs MiniDapp."],
+      "update" : "- Updated mds.js",
+      "date" : "Jan 23, 2023",
+      "history" :[
+      ]
+    },
+    {
+      "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/terminal-2.03.mds.zip",
+      "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/terminal.png",
+      "name":"Terminal",
+      "description": "Terminal CLI for Minima",
+      "version" : "2.03",
+      "about" : ["The Terminal MiniDapp is a developer app used to execute Minima commands directly on your node without a user interface.\n\n","","Using the Terminal MiniDapp, you can:\n\n","","- Check the Status of your node and the blockchain\n","- Set and check your Incentive Program Account (during Testnet only)\n","- Manually construct and post transactions\n","- Create and run Minima scripts\n","- Install and uninstall MiniDapps\n","","Type 'help' in the Terminal to see a list of all the commands."],
+      "update" : ["- Improved responsiveness\n","- Google Keyboard Enter Key Fix\n","- Copy the output for the last command to your clipboard (browser only)\n","- Export the output logs into a text file for sharing (browser only)"],
+      "date" : "Nov 21, 2022",
+      "history" :[
+        {"version": "1.91","file": "https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps_history/terminal-1.91.mds.zip","update" : ""}
+      ]
+    },
+    {
+      "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/news-2.0.mds.zip",
+      "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/news.png",
+      "name":"News Feed",
+      "description": "Keep up to date with Minima News",
+      "version" : "2.0",
+      "about" : "The News Feed is a simple MiniDapp where you can find all our latest blog posts and community updates.",
+      "update" : "- New Substack news",
+      "date" : "Nov 21, 2022",
+      "history" :[
+      ]
+    },
+    {
+      "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/docs_1.3.mds.zip",
+      "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/helpdocs.png",
+      "name":"Docs",
+      "description": "Minima Documentation and Tutorial",
+      "version" : "1.3",
+      "about" : ["The Docs MiniDapp is where you can learn about the Minima Protocol.\n\n","Here you will find our documentation and developer tutorial, which introduces Minima\u2019s KISS scripting language for creating smart contracts on Minima."],
+      "update" : "Updated Script Tutorial",
+      "date" : "Oct 03, 2022",
+      "history" :[
+        {"version": "1.1.3","file": "https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps_history/docs_1.1.3.mds.zip","update" : "App Icon updated around the application + better resolution for hub."}
+      ]
+    }
+  ]
+}

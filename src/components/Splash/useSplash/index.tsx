@@ -10,10 +10,10 @@ function useSplash() {
     if (loaded.current) {
       (async () => {
         get('SPLASH').then((response) => {
-          if (response.value !== '1') {
-            setDisplay(true);
-          } else {
+          if (response?.value === '1') {
             setDisplay(false);
+          } else {
+            setDisplay(true);
           }
         });
       })();

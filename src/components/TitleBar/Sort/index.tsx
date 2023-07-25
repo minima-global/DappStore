@@ -19,9 +19,15 @@ const Sort = () => {
     closeOptions();
   };
 
+  const setToDefault = () => {
+    setSort('default');
+    closeOptions();
+  };
+
   return (
     <div className="relative">
       <div onClick={openOptions} className="cursor-pointer flex items-center gap-3">
+        {sort === 'default' && 'Default'}
         {sort === 'alphabetical' && 'A-Z'}
         {sort === 'last_added' && 'Last added'}
         <svg
@@ -44,6 +50,9 @@ const Sort = () => {
         }`}
       >
         <div className="absolute mt-5 left-0 flex flex-col gap-4 pt-4 pl-4 pr-3 pb-4 text-core-grey-5 core-black-contrast-2 shadow-xl min-w-[220px]">
+          <div onClick={setToDefault} className="cursor-pointer">
+            Default
+          </div>
           <div onClick={setToAlphabetical} className="cursor-pointer">
             A-Z
           </div>

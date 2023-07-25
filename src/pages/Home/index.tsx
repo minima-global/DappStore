@@ -1,37 +1,60 @@
 import TitleBar from '../../components/TitleBar';
 import Sort from '../../components/TitleBar/Sort';
 import { Link } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import Modal from '../../components/UI/Modal';
 import Button from '../../components/UI/Button';
-import pandaApps from "../../panda_dapps.json";
-import { sql } from "../../lib";
-import { appContext } from "../../AppContext";
+import pandaApps from '../../panda_dapps.json';
+import { sql } from '../../lib';
+import { appContext } from '../../AppContext';
 
 function Home() {
-  const { loaded } = useContext(appContext);
+  const { loaded, sort, repositories, getRepositories } = useContext(appContext);
   const [dappLink, setDAppLink] = useState('');
   const [query, setQuery] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [displaySearch, setDisplaySearch] = useState(false);
   const [displayAddStore, setDisplayAddStore] = useState(false);
 
-  const dappLinkHasError = dappLink !== '' && !/^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/.test(dappLink) && !dappLink.includes('.json');
-
-  useEffect(() => {
-    if (loaded.current) {
-      sql('SELECT * FROM repositories').then((response) => {
-        console.log(response);
-      });
-    }
-  }, [loaded.current]);
+  const dappLinkHasError =
+    dappLink !== '' &&
+    !/^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/.test(dappLink) &&
+    !dappLink.includes('.json');
+  const hasMoreThanOneStore = loaded.current && repositories.length > 1;
 
   const addDappStore = () => {
-    if (dappLink.toLowerCase() === 'https://eurobuddha.com/panda_dapps/panda_dapps.json') {
-      sql(`INSERT INTO repositories (name, url) VALUES ('${pandaApps.name}', '${dappLink}')`).then((response) => {
-        console.log(response);
-      });
+    setError(null);
+
+    sql(`SELECT * FROM repositories WHERE url = '${dappLink}'`).then((response) => {
+      if (response.count > 0) {
+        return setError('You have already added this MiniDapp store');
+      }
+
+      if (dappLink.toLowerCase() === 'https://eurobuddha.com/panda_dapps/panda_dapps.json') {
+        sql(`INSERT INTO repositories (name, url) VALUES ('${pandaApps.name}', '${dappLink}')`).then((response) => {
+          getRepositories();
+        });
+      }
+    });
+  };
+
+  const orderedRepositories = useMemo(() => {
+    let results = repositories;
+
+    if (query !== '') {
+      results = results.filter((a) => a.NAME.toLowerCase().includes(query.toLowerCase()));
     }
-  }
+
+    if (sort === 'alphabetical') {
+      return results.sort((a, b) => a.NAME.localeCompare(b.NAME));
+    }
+
+    if (sort === 'last_added') {
+      return results.sort((a, b) => b.ID - a.ID);
+    }
+
+    return results;
+  }, [query, sort, repositories]);
 
   return (
     <div className="relative app text-white">
@@ -41,16 +64,24 @@ function Home() {
             <h1 className="text-2xl mb-3">Add a MiniDapp store</h1>
             <p className="mb-4">Dapp stores are a collection of MiniDapps that can be installed on your node.</p>
             <div className="mb-4 text-left">
+              {error && (
+                <div className="p-3 bg-red-950 bg-opacity-10 text-status-red font-bold rounded text-sm border border-status-red mb-4">{error}</div>
+              )}
               <div className="flex-grow w-full relative">
                 <input
                   type="text"
                   value={dappLink}
                   onChange={(evt) => setDAppLink(evt.target.value)}
-                  className={`pr-10 outline-none bg-core-black-contrast-1 p-3 border-2 rounded w-full ${dappLinkHasError ? 'border-status-red' : 'border-core-black-contrast-3'}`}
+                  className={`pr-10 outline-none bg-core-black-contrast-1 p-3 border-2 rounded w-full ${
+                    dappLinkHasError ? 'border-status-red' : 'border-core-black-contrast-3'
+                  }`}
                 />
                 <div className="absolute px-1 h-full right-0 top-0 flex items-center justify-end">
                   <svg
-                    onClick={() => setDAppLink('')}
+                    onClick={() => {
+                      setError(null);
+                      setDAppLink('');
+                    }}
                     className={`cursor-pointer m-2 ${dappLink !== '' ? 'visible' : 'hidden'}`}
                     width="24"
                     height="24"
@@ -72,8 +103,17 @@ function Home() {
               </div>
               {dappLinkHasError && <div className="text-status-red mt-4">Invalid URL</div>}
             </div>
-            <Button onClick={addDappStore} disabled={dappLinkHasError || dappLink === ''} variant="primary">Add store</Button>
-            <Button onClick={() => setDisplayAddStore(false)} variant="secondary">
+            <Button onClick={addDappStore} disabled={dappLinkHasError || dappLink === ''} variant="primary">
+              Add store
+            </Button>
+            <Button
+              onClick={() => {
+                setDisplayAddStore(false);
+                setError(null);
+                setDAppLink('');
+              }}
+              variant="secondary"
+            >
               Cancel
             </Button>
           </div>
@@ -86,7 +126,9 @@ function Home() {
         </Modal>
         <TitleBar />
         <div className="relative pt-2 p-4 flex flex-col gap-4 max-w-xl mx-auto">
-          <img alt="Banner" src="./assets/banner.svg" />
+          <Link to="/store/1" className="w-full">
+            <img alt="Banner" src="./assets/banner.svg" className="w-full" />
+          </Link>
           <h1 className="text-lg">My stores</h1>
           <div className="grid grid-cols-12">
             {displaySearch && (
@@ -181,29 +223,33 @@ function Home() {
               </>
             )}
           </div>
-          <Link to="/store" className="overflow-hidden flex-grow lg:px-0">
-            <div className="bg-core-black-contrast-2 rounded overflow-hidden flex items-stretch justify-start h-full">
-              <div
-                className="w-[64px] h-[64px] min-w-[64px] grow rounded bg-cover mx-auto"
-                style={{
-                  backgroundImage: `url('./assets/app.png')`,
-                }}
-              />
-              <div className="bg-core-black-contrast-2 grow p-3 px-4 w-full overflow-hidden">
-                <h5 className="font-bold mb-0.5">Official Minima MiniDapps</h5>
-                <p className="text-xs text-core-grey-80 text-ellipsis truncate">Minima Global</p>
+          {orderedRepositories.map((repository) => (
+            <Link key={repository.ID} to={`/store/${repository.ID}`} className="overflow-hidden flex-grow lg:px-0">
+              <div className="bg-core-black-contrast-2 rounded overflow-hidden flex items-stretch justify-start h-full">
+                <div
+                  className="w-[64px] h-[64px] min-w-[64px] grow rounded bg-cover mx-auto"
+                  style={{
+                    backgroundImage: `url('./assets/app.png')`,
+                  }}
+                />
+                <div className="bg-core-black-contrast-2 grow p-3 px-4 w-full overflow-hidden">
+                  <h5 className="font-bold mb-0.5">{repository.NAME}</h5>
+                  <p className="text-xs text-core-grey-80 text-ellipsis truncate">{repository.NAME}</p>
+                </div>
               </div>
+            </Link>
+          ))}
+          {!hasMoreThanOneStore && (
+            <div className="text-center mt-16">
+              <div className="text-lg mb-6">You haven’t added a store yet</div>
+              <button
+                onClick={() => setDisplayAddStore(true)}
+                className="border border-white h-[48px] max-w-[172px] w-full rounded"
+              >
+                Add a store
+              </button>
             </div>
-          </Link>
-          <div className="text-center mt-16">
-            <div className="text-lg mb-6">You haven’t added a store yet</div>
-            <button
-              onClick={() => setDisplayAddStore(true)}
-              className="border border-white h-[48px] max-w-[172px] w-full rounded"
-            >
-              Add a store
-            </button>
-          </div>
+          )}
         </div>
       </div>
     </div>
