@@ -1,5 +1,5 @@
 import TitleBarBack from '../../components/TitleBarBack';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from "react";
 import { appContext } from "../../AppContext";
 import official from '../../official_dapps.json';
@@ -12,7 +12,7 @@ import { downloadAndInstallMDSFile, downloadAndUpdateMDSFile } from "../../utili
 function Store() {
   const params = useParams();
   const navigate = useNavigate();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<any | null>(null);
   const { repositories, getRepositories, installedMiniDapps, getMds } = useContext(appContext);
   const repository = repositories.find(i => i.ID === params.id);
   const [deleteError, setDeleteError] = useState<string | null>(null);

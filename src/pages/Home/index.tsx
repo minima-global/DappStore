@@ -1,7 +1,7 @@
 import TitleBar from '../../components/TitleBar';
 import Sort from '../../components/TitleBar/Sort';
 import { Link } from 'react-router-dom';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import Modal from '../../components/UI/Modal';
 import Button from '../../components/UI/Button';
 import pandaApps from '../../panda_dapps.json';
@@ -31,7 +31,7 @@ function Home() {
       }
 
       if (dappLink.toLowerCase() === 'https://eurobuddha.com/panda_dapps/panda_dapps.json') {
-        sql(`INSERT INTO repositories (name, url) VALUES ('${pandaApps.name}', '${dappLink}')`).then((response) => {
+        sql(`INSERT INTO repositories (name, url) VALUES ('${pandaApps.name}', '${dappLink}')`).then(() => {
           getRepositories();
           setDisplayAddStore(false);
         });

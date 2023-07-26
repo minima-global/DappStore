@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createContext, useCallback, useEffect, useRef, useState } from 'react';
-import { get, isWriteMode, mds, sql } from "./lib";
+import { isWriteMode, mds, sql } from "./lib";
 
 export const appContext = createContext<any>({});
 
