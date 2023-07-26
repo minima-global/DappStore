@@ -118,12 +118,6 @@ function Home() {
             </Button>
           </div>
         </Modal>
-        <Modal display={false} frosted={true}>
-          <div className="flex flex-col gap-3">
-            <Button variant="primary">Delete store</Button>
-            <Button variant="secondary">Cancel</Button>
-          </div>
-        </Modal>
         <TitleBar />
         <div className="relative pt-2 p-4 flex flex-col gap-4 max-w-xl mx-auto">
           <Link to="/store/1" className="w-full">

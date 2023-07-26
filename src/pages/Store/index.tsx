@@ -4,6 +4,8 @@ import { useContext, useEffect, useState } from "react";
 import { appContext } from "../../AppContext";
 import official from '../../utilities/official_dapps.json';
 import pandaStore from '../../panda_dapps.json';
+import Modal from "../../components/UI/Modal";
+import Button from "../../components/UI/Button";
 
 function Store() {
   const [data, setData] = useState(null);
@@ -25,6 +27,12 @@ function Store() {
   return (
     <div className="relative app text-white overflow-hidden inline-grid">
       <div className="overflow-hidden">
+        <Modal display={false} frosted={true}>
+          <div className="flex flex-col gap-3">
+            <Button variant="primary">Delete store</Button>
+            <Button variant="secondary">Cancel</Button>
+          </div>
+        </Modal>
         <TitleBarBack label="Back">
           <div className="hidden cursor-pointer active:scale-90 absolute right-0 relative w-[36px] h-[36px] rounded-full bg-core-black-contrast-2 flex items-center justify-center">
             <svg
@@ -82,34 +90,32 @@ function Store() {
 
           <div className="flex-grow lg:px-0 flex flex-col gap-2">
             {data && data.dapps.map((app) => (
-              <Link to="/app">
-                <div className="bg-core-black-contrast-2 rounded flex justify-start items-left h-full">
-                  <div
-                    className="w-[66px] h-[64px] min-w-[64px] rounded bg-cover"
-                    style={{
-                      backgroundImage: `url('${app.icon}')`,
-                    }}
-                  />
-                  <p className="flex-grow flex items-center px-4 truncate overflow-hidden min-w-[0]">
-                    <div className="overflow-hidden truncate">
-                      <div className="text-ellipsis overflow-hidden whitespace-nowrap">
-                        {app.name}
-                      </div>
-                      <p className="text-xs text-core-grey-80 truncate overflow-hidden">{app.version}</p>
+              <div className="bg-core-black-contrast-2 rounded flex justify-start items-left h-full">
+                <div
+                  className="w-[66px] h-[64px] min-w-[64px] rounded bg-cover"
+                  style={{
+                    backgroundImage: `url('${app.icon}')`,
+                  }}
+                />
+                <p className="flex-grow flex items-center px-4 truncate overflow-hidden min-w-[0]">
+                  <div className="overflow-hidden truncate">
+                    <div className="text-ellipsis overflow-hidden whitespace-nowrap">
+                      {app.name}
                     </div>
-                  </p>
-                  <div className="pr-4 flex items-center justify-end">
-                    <button
-                      onClick={(evt) => {
-                        evt.preventDefault();
-                      }}
-                      className={`active:scale-95 transition bg-core-grey-20 mx-auto text-sm text-center w-fit rounded text-black px-5 py-1.5 rounded-full`}
-                    >
-                      Install
-                    </button>
+                    <p className="text-xs text-core-grey-80 truncate overflow-hidden">{app.version}</p>
                   </div>
+                </p>
+                <div className="pr-4 flex items-center justify-end">
+                  <button
+                    onClick={(evt) => {
+                      evt.preventDefault();
+                    }}
+                    className={`active:scale-95 transition bg-core-grey-20 mx-auto text-sm text-center w-fit rounded text-black px-5 py-1.5 rounded-full`}
+                  >
+                    Install
+                  </button>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
