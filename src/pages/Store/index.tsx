@@ -56,7 +56,7 @@ function Store() {
         ...prevState,
         [dapp.name]: true,
       }));
-      await downloadAndInstallMDSFile(dapp.file.replace('http', 'https'));
+      await downloadAndInstallMDSFile(dapp.file);
       await getMds();
     } catch {
       setErrorResponseModal('Unable to install MiniDapp, please try again later...');
