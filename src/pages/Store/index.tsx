@@ -37,7 +37,7 @@ function Store() {
     setDeleteError(null);
     setIsLoading(true);
 
-    sql(`DELETE FROM repositories WHERE id = '${escape(params.id)}'`).then(async (response) => {
+    sql(`DELETE FROM repositories WHERE id = ${escape(params.id)}`).then(async (response) => {
       await getRepositories();
       setIsLoading(false);
 

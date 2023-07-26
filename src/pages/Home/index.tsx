@@ -26,13 +26,13 @@ function Home() {
   const addDappStore = () => {
     setError(null);
 
-    sql(`SELECT * FROM repositories WHERE url = '${escape(dappLink)}'`).then((response) => {
+    sql(`SELECT * FROM repositories WHERE url = ${escape(dappLink)}`).then((response) => {
       if (response.count > 0) {
         return setError('You have already added this MiniDapp store');
       }
 
       if (dappLink.toLowerCase() === 'https://eurobuddha.com/panda_dapps/Panda_Dapps.json'.toLowerCase()) {
-        sql(`INSERT INTO repositories (name, url, icon) VALUES ('${escape(pandaApps.name)}', '${escape(dappLink)}', '${escape(pandaApps.icon)}')`).then(() => {
+        sql(`INSERT INTO repositories (name, url, icon) VALUES (${escape(pandaApps.name)}, ${escape(dappLink)}, ${escape(pandaApps.icon)})`).then(() => {
           getRepositories();
           setDisplayAddStore(false);
         });
