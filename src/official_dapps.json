@@ -3,7 +3,6 @@
   "description":"Official Minima DAPPs",
   "icon":"https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/minima_logo.png",
   "version":"1.0",
-
   "dapps":[
     {
       "file":"https://storage.googleapis.com/minidapps-363120.appspot.com/minidapps/scriptide-2.0.1.mds.zip",

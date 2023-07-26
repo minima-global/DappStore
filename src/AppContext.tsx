@@ -39,7 +39,7 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
             setAppIsInWriteMode(appIsInWriteMode);
           });
 
-          const dbQuery = 'CREATE TABLE IF NOT EXISTS \`repositories\` (`id` bigint auto_increment, `name` varchar(512) NOT NULL, `url` varchar(2048) NOT NULL, `created_at` TIMESTAMP)';
+          const dbQuery = 'CREATE TABLE IF NOT EXISTS \`repositories\` (`id` bigint auto_increment, `name` varchar(512) NOT NULL, `url` varchar(2048) NOT NULL, `icon` varchar(2048), `created_at` TIMESTAMP)';
 
           /**
            * Create repositories db table if it does not exist
@@ -53,7 +53,7 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
             sql(check).then((response) => {
 
               if(response.count === 0) {
-                const add = "INSERT INTO \`repositories\` (name, url) VALUES ('Minima Global', 'https://storage.googleapis.com/minidapps-363120.appspot.com/dapps.json')";
+                const add = "INSERT INTO \`repositories\` (name, url, icon) VALUES ('Minima Global', 'https://storage.googleapis.com/minidapps-363120.appspot.com/dapps.json', 'https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/minima_logo.png')";
 
                 /**
                  * Add official repo if it's missing

@@ -30,8 +30,8 @@ function Home() {
         return setError('You have already added this MiniDapp store');
       }
 
-      if (dappLink.toLowerCase() === 'https://eurobuddha.com/panda_dapps/panda_dapps.json') {
-        sql(`INSERT INTO repositories (name, url) VALUES ('${pandaApps.name}', '${dappLink}')`).then(() => {
+      if (dappLink.toLowerCase() === 'https://eurobuddha.com/panda_dapps/Panda_Dapps.json'.toLowerCase()) {
+        sql(`INSERT INTO repositories (name, url, icon) VALUES ('${pandaApps.name}', '${dappLink}', '${pandaApps.icon}')`).then(() => {
           getRepositories();
           setDisplayAddStore(false);
         });
@@ -222,9 +222,9 @@ function Home() {
             <Link key={repository.ID} to={`/store/${repository.ID}`} className="overflow-hidden flex-grow lg:px-0">
               <div className="bg-core-black-contrast-2 rounded overflow-hidden flex items-stretch justify-start h-full">
                 <div
-                  className="w-[64px] h-[64px] min-w-[64px] grow rounded bg-cover mx-auto"
+                  className="w-[64px] min-w-[64px] rounded bg-cover"
                   style={{
-                    backgroundImage: `url('./assets/app.png')`,
+                    backgroundImage: `url('${repository.ICON}'), url('./assets/app.png')`,
                   }}
                 />
                 <div className="bg-core-black-contrast-2 grow p-3 px-4 w-full overflow-hidden">
