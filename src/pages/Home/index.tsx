@@ -33,6 +33,7 @@ function Home() {
       if (dappLink.toLowerCase() === 'https://eurobuddha.com/panda_dapps/panda_dapps.json') {
         sql(`INSERT INTO repositories (name, url) VALUES ('${pandaApps.name}', '${dappLink}')`).then((response) => {
           getRepositories();
+          setDisplayAddStore(false);
         });
       }
     });

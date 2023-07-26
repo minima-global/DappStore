@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createContext, useCallback, useEffect, useRef, useState } from 'react';
-import { get, sql } from "./lib";
+import { get, isWriteMode, mds, sql } from "./lib";
 
 export const appContext = createContext<any>({});
 
@@ -8,10 +8,18 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const loaded = useRef(false);
   const [sort, setSort] = useState('default');
   const [repositories, setRepositories] = useState([]);
+  const [installedMiniDapps, setInstalledMiniDapps] = useState([]);
+  const [appIsInWriteMode, setAppIsInWriteMode] = useState<boolean | null>(null);
 
   const getRepositories = useCallback(() => {
     sql('SELECT * FROM repositories').then((response) => {
       setRepositories(response.rows);
+    });
+  }, []);
+
+  const getMds = useCallback(() => {
+    mds().then((response) => {
+      setInstalledMiniDapps(response.minidapps);
     });
   }, []);
 
@@ -24,6 +32,12 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
         if (evt.event === 'inited') {
           // const dropQuery = 'DROP TABLE \`repositories\`';
           // sql(dropQuery);
+
+          getMds();
+
+          isWriteMode().then((appIsInWriteMode) => {
+            setAppIsInWriteMode(appIsInWriteMode);
+          });
 
           const dbQuery = 'CREATE TABLE IF NOT EXISTS \`repositories\` (`id` bigint auto_increment, `name` varchar(512) NOT NULL, `url` varchar(2048) NOT NULL, `created_at` TIMESTAMP)';
 
@@ -53,7 +67,7 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
         }
       });
     }
-  }, [loaded, getRepositories]);
+  }, [loaded, getRepositories, getMds]);
 
   useEffect(() => {
     if (loaded.current) {
@@ -65,8 +79,11 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     loaded,
     sort,
     setSort,
+    getMds,
     repositories,
     getRepositories,
+    appIsInWriteMode,
+    installedMiniDapps,
   };
 
   return <appContext.Provider value={value}>{children}</appContext.Provider>;

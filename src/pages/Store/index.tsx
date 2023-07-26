@@ -1,36 +1,106 @@
 import TitleBarBack from '../../components/TitleBarBack';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from "react";
 import { appContext } from "../../AppContext";
-import official from '../../utilities/official_dapps.json';
+import official from '../../official_dapps.json';
 import pandaStore from '../../panda_dapps.json';
 import Modal from "../../components/UI/Modal";
 import Button from "../../components/UI/Button";
+import { sql } from "../../lib";
+import { downloadAndInstallMDSFile, downloadAndUpdateMDSFile } from "../../utilities";
 
 function Store() {
-  const [data, setData] = useState(null);
-  const { repositories } = useContext(appContext);
   const params = useParams();
+  const navigate = useNavigate();
+  const [data, setData] = useState(null);
+  const { repositories, getRepositories, installedMiniDapps, getMds } = useContext(appContext);
   const repository = repositories.find(i => i.ID === params.id);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showDeleteStore, setShowDeleteStore] = useState(false);
+  const [spinners, setSpinners] = useState<Record<string, boolean>>({});
+  const [errorResponseModal, setErrorResponseModal] = useState<string | false>(false);
 
   useEffect(() => {
     if (repository && !data) {
       if (params.id === '1') {
         setData(official);
       }
-      if (params.id === '2') {
+      if (repository.URL === 'https://eurobuddha.com/panda_dapps/panda_dapps.json') {
         setData(pandaStore);
       }
     }
-  }, repository);
+  }, [repository, params.id]);
+
+  const deleteDappStore = () => {
+    setDeleteError(null);
+    setIsLoading(true);
+
+    sql(`DELETE FROM repositories WHERE id = '${params.id}'`).then(async (response) => {
+      await getRepositories();
+      setIsLoading(false);
+
+      if (!response.status) {
+        return setDeleteError('Could not delete this Minidapp store, please try again later');
+      }
+
+      setShowDeleteStore(false);
+      navigate('/');
+    });
+  };
+
+  const installApp = async (dapp: any) => {
+    try {
+      setSpinners(prevState => ({
+        ...prevState,
+        [dapp.name]: true,
+      }));
+      await downloadAndInstallMDSFile(dapp.file);
+      await getMds();
+    } catch {
+      setErrorResponseModal('Unable to install MiniDapp, please try again later...');
+    } finally {
+      setSpinners(prevState => ({
+        ...prevState,
+        [dapp.name]: false,
+      }));
+    }
+  };
+
+  const updateApp = async (dapp: any, uid: string) => {
+    try {
+      setSpinners(prevState => ({
+        ...prevState,
+        [dapp.name]: true,
+      }));
+      await downloadAndUpdateMDSFile(dapp.file, uid);
+      await getMds();
+    } catch {
+      setErrorResponseModal('Unable to update MiniDapp, please try again later...');
+    } finally {
+      setSpinners(prevState => ({
+        ...prevState,
+        [dapp.name]: false,
+      }));
+    }
+  };
 
   return (
     <div className="relative app text-white overflow-hidden inline-grid">
       <div className="overflow-hidden">
-        <Modal display={false} frosted={true}>
+        <Modal display={showDeleteStore} frosted={true}>
           <div className="flex flex-col gap-3">
-            <Button variant="primary">Delete store</Button>
-            <Button variant="secondary">Cancel</Button>
+            {deleteError && (
+              <div className="p-3 bg-red-950 bg-opacity-10 text-status-red font-bold rounded text-sm border border-status-red mb-2">{deleteError}</div>
+            )}
+            <Button onClick={deleteDappStore} loading={isLoading} variant="primary">Delete store</Button>
+            <Button onClick={() => setShowDeleteStore(false)} variant="secondary">Cancel</Button>
+          </div>
+        </Modal>
+        <Modal display={!!errorResponseModal} frosted={true}>
+          <div className="flex flex-col gap-3">
+            <div className="p-3 bg-red-950 bg-opacity-10 text-status-red font-bold rounded text-sm border border-status-red mb-2">{errorResponseModal}</div>
+            <Button onClick={() => setErrorResponseModal(false)} variant="secondary">Cancel</Button>
           </div>
         </Modal>
         <TitleBarBack label="Back">
@@ -50,7 +120,7 @@ function Store() {
             </svg>
           </div>
           {params.id !== '1' && (
-            <div className="cursor-pointer active:scale-90 absolute right-0 relative w-[36px] h-[36px] rounded-full bg-core-black-contrast-2 flex items-center justify-center">
+            <div onClick={() => setShowDeleteStore(true)} className="cursor-pointer active:scale-90 absolute right-0 relative w-[36px] h-[36px] rounded-full bg-core-black-contrast-2 flex items-center justify-center">
               <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M3.30771 18.5C2.80899 18.5 2.38303 18.3117 2.02983 17.9352C1.67661 17.5586 1.5 17.1045 1.5 16.5729V3.04211H0.5V1.44304H4.99999V0.5H11V1.44304H15.5V3.04211H14.5V16.5729C14.5 17.1114 14.325 17.5672 13.975 17.9403C13.625 18.3134 13.1974 18.5 12.6923 18.5H3.30771ZM13 3.04211H2.99998V16.5729C2.99998 16.6686 3.02883 16.7472 3.08653 16.8087C3.14423 16.8702 3.21796 16.9009 3.30771 16.9009H12.6923C12.7692 16.9009 12.8397 16.8668 12.9039 16.7984C12.968 16.7301 13 16.6549 13 16.5729V3.04211ZM5.40387 14.7688H6.90385V5.17424H5.40387V14.7688ZM9.09615 14.7688H10.5961V5.17424H9.09615V14.7688Z"
@@ -88,35 +158,84 @@ function Store() {
           {/*  </svg>*/}
           {/*</div>*/}
 
-          <div className="flex-grow lg:px-0 flex flex-col gap-2">
-            {data && data.dapps.map((app) => (
-              <div className="bg-core-black-contrast-2 rounded flex justify-start items-left h-full">
-                <div
-                  className="w-[66px] h-[64px] min-w-[64px] rounded bg-cover"
-                  style={{
-                    backgroundImage: `url('${app.icon}')`,
-                  }}
-                />
-                <p className="flex-grow flex items-center px-4 truncate overflow-hidden min-w-[0]">
-                  <div className="overflow-hidden truncate">
-                    <div className="text-ellipsis overflow-hidden whitespace-nowrap">
-                      {app.name}
-                    </div>
-                    <p className="text-xs text-core-grey-80 truncate overflow-hidden">{app.version}</p>
-                  </div>
-                </p>
-                <div className="pr-4 flex items-center justify-end">
-                  <button
-                    onClick={(evt) => {
-                      evt.preventDefault();
+          <div className="flex-grow lg:px-0 flex flex-col gap-2 mb-5">
+            {data && data.dapps.map((app) => {
+              const isInstalled = installedMiniDapps.find(i => i.conf.name === app.name);
+              const currentVersion = app.version.split('.');
+              const repositoryVersion = isInstalled ? isInstalled.conf.version.split('.') : '';
+
+              const majorAvailable = Number(repositoryVersion[0]) > Number(currentVersion[0]);
+              const minorAvailable = Number(repositoryVersion[1]) > Number(currentVersion[1]);
+              const patchAvailable = Number(repositoryVersion[2]) > Number(currentVersion[2]);
+
+              const updateAvailable = majorAvailable ? true : minorAvailable ? true : patchAvailable;
+
+              return (
+                <div key={app.name} className="bg-core-black-contrast-2 rounded flex justify-start items-left h-full">
+                  <div
+                    className="w-[66px] h-[64px] min-w-[64px] rounded bg-cover"
+                    style={{
+                      backgroundImage: `url('${app.icon}')`,
                     }}
-                    className={`active:scale-95 transition bg-core-grey-20 mx-auto text-sm text-center w-fit rounded text-black px-5 py-1.5 rounded-full`}
-                  >
-                    Install
-                  </button>
+                  />
+                  <div className="flex-grow flex items-center px-4 truncate overflow-hidden min-w-[0]">
+                    <div className="overflow-hidden truncate">
+                      <div className="text-ellipsis overflow-hidden whitespace-nowrap">
+                        {app.name}
+                      </div>
+                      <div className="text-xs text-core-grey-80 truncate overflow-hidden">{app.version}</div>
+                    </div>
+                  </div>
+                  <div className={`pr-4 flex items-center justify-end`}>
+                    {spinners[app.name] && (
+                      <div role="status" className="min-w-[60px]">
+                        <svg aria-hidden="true"
+                             className="inline w-7 h-7 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300"
+                             viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                            fill="currentColor"/>
+                          <path
+                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                            fill="currentFill"/>
+                        </svg>
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    )}
+                    {!spinners[app.name] && !isInstalled && (
+                      <button
+                        onClick={(evt) => {
+                          evt.preventDefault();
+                          installApp(app);
+                        }}
+                        className={`active:scale-95 transition min-w-[100px] bg-core-grey-20 mx-auto text-sm text-center w-fit rounded text-black px-5 py-1.5 rounded-full`}
+                      >
+                        Install
+                      </button>
+                    )}
+                    {isInstalled && !updateAvailable && (
+                      <button
+                        disabled={true}
+                        className={`transition border border-gray-300 text-gray-200 mx-auto text-sm text-center w-fit rounded text-black px-5 py-1.5 rounded-full`}
+                      >
+                        Installed
+                      </button>
+                    )}
+                    {!spinners[app.name] && isInstalled && updateAvailable && (
+                      <button
+                        onClick={(evt) => {
+                          evt.preventDefault();
+                          updateApp(app, isInstalled.uid);
+                        }}
+                        className={`active:scale-95 transition min-w-[100px] bg-core-grey-20 mx-auto text-sm text-center w-fit rounded text-black px-5 py-1.5 rounded-full`}
+                      >
+                        Update
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </div>
