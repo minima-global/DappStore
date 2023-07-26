@@ -8,6 +8,7 @@ import Modal from '../../components/UI/Modal';
 import Button from '../../components/UI/Button';
 import { sql } from '../../lib';
 import { downloadAndInstallMDSFile, downloadAndUpdateMDSFile } from '../../utilities';
+import { escape } from "sqlstring";
 
 function Store() {
   const params = useParams();
@@ -36,7 +37,7 @@ function Store() {
     setDeleteError(null);
     setIsLoading(true);
 
-    sql(`DELETE FROM repositories WHERE id = '${params.id}'`).then(async (response) => {
+    sql(`DELETE FROM repositories WHERE id = '${escape(params.id)}'`).then(async (response) => {
       await getRepositories();
       setIsLoading(false);
 

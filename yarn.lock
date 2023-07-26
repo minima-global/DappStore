@@ -596,6 +596,11 @@
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.0.tgz#591c1ce3a702c45ee15f47a42ade72c2fd78978a"
   integrity sha512-G8hZ6XJiHnuhQKR7ZmysCeJWE08o8T0AXtk5darsCaTVsYZhhgUrq53jizaR2FvsoeCwJhlmwTjkXBY5Pn/ZHw==
 
+"@types/sqlstring@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@types/sqlstring/-/sqlstring-2.3.0.tgz#5960ade0166cfaaa4673fc74ec8157a08d06c89e"
+  integrity sha512-kMFecDYYFk/f5fljO0UFrSPwU1JxY4mIjX6ic7MHv5nD6sEd3NYLoWcOV/3s6Drs7RHdCwTQdD5NdgVl0I2zzg==
+
 "@typescript-eslint/eslint-plugin@^5.57.1":
   version "5.59.11"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.59.11.tgz#8d466aa21abea4c3f37129997b198d141f09e76f"
@@ -2303,6 +2308,16 @@ source-map@^0.6.0, source-map@~0.6.0:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
+
+sqlstring@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/sqlstring/-/sqlstring-2.3.3.tgz#2ddc21f03bce2c387ed60680e739922c65751d0c"
+  integrity sha512-qC9iz2FlN7DQl3+wjwn3802RTyjCx7sDvfQEXchwa6CWOx07/WVfh91gBmQ9fahw8snwGEWU3xGzOt4tFyHLxg==
+
+string-sanitizer@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/string-sanitizer/-/string-sanitizer-2.0.2.tgz#4f5fc22cc2c6466e7696beb497c79840f7b5a551"
+  integrity sha512-zECtWmUawolaVbUOdDRdhAM4jN7wl1sB4indjTmHpUFavzFSeYEDSVF85dZPPyDKoMRTJbrz+Tp0SjPPCWxscA==
 
 strip-ansi@^6.0.1:
   version "6.0.1"
