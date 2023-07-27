@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { createContext, useCallback, useEffect, useRef, useState } from 'react';
-import { isWriteMode, mds, sql } from "./lib";
+import { downloadFile, hexToBase64, isWriteMode, loadBinary, mds, sql } from "./lib";
+import { escape } from "sqlstring";
 
 export const appContext = createContext<any>({});
 
 const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const loaded = useRef(false);
+  const [initSuccess, setInitSuccess] = useState(false);
   const [sort, setSort] = useState('default');
   const [repositories, setRepositories] = useState([]);
   const [installedMiniDapps, setInstalledMiniDapps] = useState([]);
@@ -28,10 +30,11 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     if (!loaded.current) {
       loaded.current = true;
 
-      (window as any).MDS.init((evt: any) => {
+      (window as any).MDS.init(async (evt: any) => {
         if (evt.event === 'inited') {
-          // const dropQuery = 'DROP TABLE \`repositories\`';
-          // sql(dropQuery);
+          const dropQuery = 'DROP TABLE \`repositories\`';
+          await sql(dropQuery);
+          setInitSuccess(true);
 
           getMds();
 
@@ -45,7 +48,8 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
            * Create repositories db table if it does not exist
            */
           sql(dbQuery).then(() => {
-            const check = "SELECT * FROM \`repositories\` WHERE `url` = 'https://storage.googleapis.com/minidapps-363120.appspot.com/dapps.json'";
+            const url = 'https://minidapps.minima.global/data/dapps.json';
+            const check = `SELECT * FROM \`repositories\` WHERE \`url\` = ${escape(url)}`;
 
             /**
              * Check if official repo is here
@@ -53,13 +57,16 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
             sql(check).then((response) => {
 
               if(response.count === 0) {
-                const add = "INSERT INTO \`repositories\` (name, url, icon) VALUES ('Minima Global', 'https://storage.googleapis.com/minidapps-363120.appspot.com/dapps.json', 'https://storage.googleapis.com/minidapps-363120.appspot.com/icons/mainnet/minima_logo.png')";
 
-                /**
-                 * Add official repo if it's missing
-                 */
-                sql(add).then(() => {
-                  getRepositories();
+                downloadFile(url).then(function (response: any) {
+                  loadBinary(response.download.file).then(function (response: any) {
+                    const data = hexToBase64(response.load.data);
+                    const query = `INSERT INTO \`repositories\` (name, url, icon) VALUES (${escape(data.name)}, ${escape(url)}, ${escape(data.icon)})`;
+
+                    sql(query).then(() => {
+                      getRepositories();
+                    });
+                  });
                 });
               }
             });
@@ -70,10 +77,10 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   }, [loaded, getRepositories, getMds]);
 
   useEffect(() => {
-    if (loaded.current) {
+    if (loaded.current && initSuccess) {
       getRepositories();
     }
-  }, [loaded.current, getRepositories]);
+  }, [loaded.current, initSuccess, getRepositories]);
 
   const value = {
     loaded,

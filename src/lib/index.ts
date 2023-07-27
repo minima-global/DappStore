@@ -117,3 +117,19 @@ export function mds(): any {
     });
   });
 }
+
+export function loadBinary(filename) {
+  return new Promise((resolve, reject) => {
+    (window as any).MDS.file.loadbinary(filename, function (response: any) {
+      if (response.status) {
+        return resolve(response.response);
+      }
+
+      return reject();
+    });
+  });
+}
+
+export function hexToBase64(hexStr: string) {
+  return JSON.parse(atob(MDS.util.hexToBase64(hexStr)));
+}

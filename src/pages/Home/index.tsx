@@ -4,15 +4,15 @@ import { Link } from 'react-router-dom';
 import { useContext, useMemo, useState } from 'react';
 import Modal from '../../components/UI/Modal';
 import Button from '../../components/UI/Button';
-import pandaApps from '../../panda_dapps.json';
-import { sql } from '../../lib';
+import { downloadFile, hexToBase64, loadBinary, sql } from '../../lib';
 import { appContext } from '../../AppContext';
-import { escape } from "sqlstring";
+import { escape } from 'sqlstring';
 
 function Home() {
   const { loaded, sort, repositories, getRepositories } = useContext(appContext);
   const [dappLink, setDAppLink] = useState('');
   const [query, setQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [displaySearch, setDisplaySearch] = useState(false);
   const [displayAddStore, setDisplayAddStore] = useState(false);
@@ -25,18 +25,35 @@ function Home() {
 
   const addDappStore = () => {
     setError(null);
+    setIsLoading(true);
 
     sql(`SELECT * FROM repositories WHERE url = ${escape(dappLink)}`).then((response) => {
       if (response.count > 0) {
+        setIsLoading(false);
         return setError('You have already added this MiniDapp store');
       }
 
-      if (dappLink.toLowerCase() === 'https://eurobuddha.com/panda_dapps/Panda_Dapps.json'.toLowerCase()) {
-        sql(`INSERT INTO repositories (name, url, icon) VALUES (${escape(pandaApps.name)}, ${escape(dappLink)}, ${escape(pandaApps.icon)})`).then(() => {
-          getRepositories();
-          setDisplayAddStore(false);
+      downloadFile(dappLink).then(function (response: any) {
+        loadBinary(response.download.file).then(function (response: any) {
+          const data = hexToBase64(response.load.data);
+
+          if (!data.name) {
+            setIsLoading(false);
+            return setError('Invalid MiniDapp store, please try again later');
+          }
+
+          sql(
+            `INSERT INTO repositories (name, url, icon) VALUES (${escape(data.name)}, ${escape(dappLink)}, ${escape(
+              data.icon
+            )})`
+          ).then(() => {
+            getRepositories();
+            setDAppLink('');
+            setIsLoading(false);
+            setDisplayAddStore(false);
+          });
         });
-      }
+      });
     });
   };
 
@@ -67,7 +84,9 @@ function Home() {
             <p className="mb-4">Dapp stores are a collection of MiniDapps that can be installed on your node.</p>
             <div className="mb-4 text-left">
               {error && (
-                <div className="p-3 bg-red-950 bg-opacity-10 text-status-red font-bold rounded text-sm border border-status-red mb-4">{error}</div>
+                <div className="p-3 bg-red-950 bg-opacity-10 text-status-red font-bold rounded text-sm border border-status-red mb-4">
+                  {error}
+                </div>
               )}
               <div className="flex-grow w-full relative">
                 <input
@@ -105,7 +124,7 @@ function Home() {
               </div>
               {dappLinkHasError && <div className="text-status-red mt-4">Invalid URL</div>}
             </div>
-            <Button onClick={addDappStore} disabled={dappLinkHasError || dappLink === ''} variant="primary">
+            <Button loading={isLoading} onClick={addDappStore} disabled={dappLinkHasError || dappLink === ''} variant="primary">
               Add store
             </Button>
             <Button
