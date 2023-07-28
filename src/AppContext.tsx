@@ -32,14 +32,16 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 
       (window as any).MDS.init(async (evt: any) => {
         if (evt.event === 'inited') {
-          const dropQuery = 'DROP TABLE \`repositories\`';
-          await sql(dropQuery);
+          // const dropQuery = 'DROP TABLE \`repositories\`';
+          // await sql(dropQuery);
           setInitSuccess(true);
-
-          getMds();
 
           isWriteMode().then((appIsInWriteMode) => {
             setAppIsInWriteMode(appIsInWriteMode);
+
+            if (appIsInWriteMode) {
+              getMds();
+            }
           });
 
           const dbQuery = 'CREATE TABLE IF NOT EXISTS \`repositories\` (`id` bigint auto_increment, `name` varchar(512) NOT NULL, `url` varchar(2048) NOT NULL, `icon` varchar(2048), `created_at` TIMESTAMP)';
