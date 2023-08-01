@@ -7,6 +7,9 @@ import Button from '../../components/UI/Button';
 import { downloadFile, hexToBase64, loadBinary, sql } from '../../lib';
 import { appContext } from '../../AppContext';
 import { escape } from 'sqlstring';
+import { IS_MINIMA_BROWSER } from "../../env";
+import { exampleMiniDappStoreJson } from "../../example_minidapp_store";
+import { toHex } from "../../utilities";
 
 function Home() {
   const { loaded, sort, repositories, getRepositories } = useContext(appContext);
@@ -75,6 +78,29 @@ function Home() {
 
     return results;
   }, [query, sort, repositories]);
+
+  const downloadExample = () => {
+    if (IS_MINIMA_BROWSER) {
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      Android.blobDownload('example_dapp_store.json', toHex(JSON.stringify(exampleMiniDappStoreJson, null, 4)));
+    } else {
+      var blob = new Blob([JSON.stringify(exampleMiniDappStoreJson)]);
+      const url = URL.createObjectURL(blob);
+
+      // Create a link element
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'example_dapp_store.json';
+      document.body.appendChild(link);
+      link.click();
+
+      URL.revokeObjectURL(url);
+    }
+
+    setAddOwnStore(false);
+  };
 
   return (
     <div className="relative app text-white">
@@ -156,13 +182,7 @@ function Home() {
               <li>Add a new store into your Dapp Store MiniDapp by pasting in the public URL of the json file</li>
               <li>Share your URL with friends so they can add your store to their node!</li>
             </ol>
-            <a
-              href="./example_minidapp_store.json"
-              download="example_dapp_store.json"
-              onClick={() => setAddOwnStore(false)}
-            >
-              <Button variant="primary">Download Example JSON</Button>
-            </a>
+            <Button onClick={downloadExample} variant="primary">Download Example JSON</Button>
             <Button
               variant="secondary"
               onClick={() => setAddOwnStore(false)}
@@ -175,7 +195,7 @@ function Home() {
           <div>
             <button
               onClick={() => setAddOwnStore(true)}
-              className="w-full border border-white text-sm h-[32px] px-3 pt-0.5 w-fit w-full rounded font-bold"
+              className="w-full border border-white text-sm h-[32px] px-2 lg:px-3 w-fit w-full rounded font-bold"
             >
               Create your own store
             </button>

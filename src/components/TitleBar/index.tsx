@@ -7,8 +7,8 @@ const TitleBar: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <div className="sticky top-0 z-40" onClick={openTitleBar}>
-      <div className="grid grid-cols-12">
-        <div className="col-span-6 lg:col-span-8 p-4">
+      <div className="flex">
+        <div className="p-4">
           <Link to="/">
             <div className="cursor-pointer flex items-center">
               <img src="./icon.png" className="w-8 h-8 rounded" alt="Logo" />
@@ -16,7 +16,7 @@ const TitleBar: FC<PropsWithChildren> = ({ children }) => {
             </div>
           </Link>
         </div>
-        <div className="col-span-6 lg:col-span-4 relative flex items-center justify-end p-4">
+        <div className="relative flex-grow flex items-center justify-end p-4">
           {children}
         </div>
       </div>
