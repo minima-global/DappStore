@@ -16,6 +16,7 @@ function Home() {
   const [error, setError] = useState<string | null>(null);
   const [displaySearch, setDisplaySearch] = useState(false);
   const [displayAddStore, setDisplayAddStore] = useState(false);
+  const [displayOwnStore, setAddOwnStore] = useState(false);
 
   const dappLinkHasError =
     dappLink !== '' &&
@@ -124,7 +125,12 @@ function Home() {
               </div>
               {dappLinkHasError && <div className="text-status-red mt-4">Invalid URL</div>}
             </div>
-            <Button loading={isLoading} onClick={addDappStore} disabled={dappLinkHasError || dappLink === ''} variant="primary">
+            <Button
+              loading={isLoading}
+              onClick={addDappStore}
+              disabled={dappLinkHasError || dappLink === ''}
+              variant="primary"
+            >
               Add store
             </Button>
             <Button
@@ -139,8 +145,43 @@ function Home() {
             </Button>
           </div>
         </Modal>
-        <TitleBar />
-        <div className="relative pt-2 p-4 flex flex-col gap-4 max-w-xl mx-auto">
+        <Modal display={displayOwnStore} frosted={true}>
+          <div className="flex flex-col gap-3 text-center">
+            <h1 className="text-2xl mb-3">Create your own store</h1>
+            <p className="mb-3">Collect your MiniDapps in one place by creating your own dapp store.</p>
+            <h5 className="font-bold mb-3">Steps</h5>
+            <ol className="list-decimal text-sm ml-4 mb-6">
+              <li>Complete the json file for your MiniDapps using the template provided</li>
+              <li>Host the json file in the same location as your MiniDapps</li>
+              <li>Add a new store into your Dapp Store MiniDapp by pasting in the public URL of the json file</li>
+              <li>Share your URL with friends so they can add your store to their node!</li>
+            </ol>
+            <a
+              href="./example_minidapp_store.json"
+              download="example_dapp_store.json"
+              onClick={() => setAddOwnStore(false)}
+            >
+              <Button variant="primary">Download Example JSON</Button>
+            </a>
+            <Button
+              variant="secondary"
+              onClick={() => setAddOwnStore(false)}
+            >
+              Close
+            </Button>
+          </div>
+        </Modal>
+        <TitleBar>
+          <div>
+            <button
+              onClick={() => setAddOwnStore(true)}
+              className="w-full border border-white text-sm h-[32px] px-3 pt-0.5 w-fit w-full rounded font-bold"
+            >
+              Create your own store
+            </button>
+          </div>
+        </TitleBar>
+        <div className="relative pt-2 p-4 flex flex-col gap-4 max-w-xl mx-auto h-full">
           <Link to="/store/1" className="w-full">
             <img alt="Banner" src="./assets/banner.svg" className="w-full" />
           </Link>

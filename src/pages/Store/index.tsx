@@ -148,13 +148,15 @@ function Store() {
           )}
         </TitleBarBack>
         <div className="relative pt-2 p-4 flex flex-col gap-4 max-w-xl mx-auto">
-          <div className="h-[140px] w-full bg-[#0595E7] rounded relative flex">
-            <div className="hidden absolute bottom-0 p-3 left-0 right-0 flex justify-center gap-2 mx-auto">
-              <div className="node w-[8px] h-[8px] bg-white rounded-full" />
-              <div className="node w-[8px] h-[8px] bg-core-grey-80 rounded-full" />
-              <div className="node w-[8px] h-[8px] bg-core-grey-80 rounded-full" />
+          {data && data.banner && (
+            <div className="h-[140px] w-full rounded-lg relative flex bg-center bg-no-repeat bg-cover" style={{ backgroundImage: `url(${data.banner})` }}>
+              <div className="hidden absolute bottom-0 p-3 left-0 right-0 flex justify-center gap-2 mx-auto">
+                <div className="node w-[8px] h-[8px] bg-white rounded-full" />
+                <div className="node w-[8px] h-[8px] bg-core-grey-80 rounded-full" />
+                <div className="node w-[8px] h-[8px] bg-core-grey-80 rounded-full" />
+              </div>
             </div>
-          </div>
+          )}
           {!data && (
             <div className="min-h-[200px] flex items-center justify-center">
               <div className="text-center">
@@ -203,14 +205,12 @@ function Store() {
                     i.conf.name.toLowerCase() === app.name.toLowerCase() ||
                     i.conf.description.toLowerCase() === app.name.toLowerCase()
                 );
-                const repositoryVersion = app.version.split('.');
-                const installedVersion = isInstalled ? isInstalled.conf.version.split('.') : '';
 
-                const majorAvailable = Number(repositoryVersion[0]) > Number(installedVersion[0]);
-                const minorAvailable = Number(repositoryVersion[1]) > Number(installedVersion[1]);
-                const patchAvailable = repositoryVersion[2] ? Number(repositoryVersion[2]) > Number(installedVersion[2]) : false;
-
-                const updateAvailable = majorAvailable ? true : minorAvailable ? true : patchAvailable;
+                // check if repo version is higher than installed version, this will dictate if
+                // the update button should show
+                const repositoryVersion = Number(app.version.split('.').join(''));
+                const installedVersion = isInstalled ? Number(isInstalled.conf.version.split('.').join('')) : false;
+                const updateAvailable = installedVersion ? repositoryVersion > installedVersion : false;
 
                 return (
                   <div key={app.name} className="bg-core-black-contrast-2 rounded flex justify-start items-left h-full">
