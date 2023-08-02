@@ -213,7 +213,7 @@ function Store() {
                 const updateAvailable = installedVersion ? repositoryVersion > installedVersion : false;
 
                 // isLinkable, only show app link if the app has a description
-                const isLinkable = app.history;
+                const isLinkable = app.manifest_version === 2 || app.update || app.history;
 
                 return (
                   <Link to={`${isLinkable ? `/store/${params.id}/${app.name}` : '#'}`} key={app.name} className={`bg-core-black-contrast-2 rounded flex justify-start items-left h-full ${isLinkable ? 'cursor-pointer' : 'cursor-default'}`}>

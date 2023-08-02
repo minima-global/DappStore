@@ -204,6 +204,16 @@ function AppPage() {
                 </div>
               )}
 
+              {repositoryApp.repository_url && (
+                <div className="mt-8">
+                  <div className="my-6 bg-core-black-contrast-3 h-[2px] w-full" />
+                  <h5 className="mb-3">Repository URL</h5>
+                  <div className="text-core-grey-60 mb-3">
+                    <a className="underline" href={repositoryApp.repository_url}>{repositoryApp.repository_url}</a>
+                  </div>
+                </div>
+              )}
+
               {repositoryApp.release_notes && (
                 <div className="mt-8">
                   <div className="my-6 bg-core-black-contrast-3 h-[2px] w-full" />
