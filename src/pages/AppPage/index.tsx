@@ -134,11 +134,12 @@ function AppPage() {
                 }}
               />
 
-              <h1 className="text-3xl mb-2">{repositoryApp.name}</h1>
-              <p className="mb-2">{repositoryApp.description}</p>
+              <h1 className="text-3xl mb-3">{repositoryApp.name}</h1>
+              <p className="mb-4">{repositoryApp.description}</p>
+              <p className="mb-2 text-core-grey-60">Version: {repositoryApp.version}</p>
               <p className="text-core-grey-60 mb-8">Updated: {repositoryApp.date}</p>
 
-              <div className="min-h-[48px] h-full mb-4">
+              <div className="min-h-[48px] h-full mb-5">
                 {spinners[repositoryApp.name] && (
                   <div className="flex items-center pl-8 relative overflow-hidden">
                     <div role="status" className="min-w-[60px] max-h-[28px]">

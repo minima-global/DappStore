@@ -2,7 +2,7 @@
   "name": "dappstore",
   "private": true,
   "description": "Minidapp store to download all your favourite apps!",
-  "version": "0.3.4",
+  "version": "0.3.6",
   "type": "module",
   "scripts": {
     "dev": "vite",
