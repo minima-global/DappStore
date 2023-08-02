@@ -1,5 +1,5 @@
 import { escape } from 'sqlstring';
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import { appContext } from '../../AppContext';
@@ -36,9 +36,9 @@ function AppPage() {
           const data = hexToBase64(response.load.data);
 
           sql(
-            `UPDATE repositories SET name = ${escape(data.name)}, icon ${escape(data.icon)} WHERE id = ${escape(
+            `UPDATE repositories SET name = ${escape(data.name)}, icon = ${escape(data.icon)} WHERE id = ${escape(
               params.id
-            )})`
+            )}`
           ).then(() => {
             setData(data);
           });
@@ -199,7 +199,8 @@ function AppPage() {
                 <div>
                   <h5 className="mb-3">About</h5>
                   <div className="text-core-grey-60 mb-3" style={{ whiteSpace: 'pre-line' }}>
-                    {Array.isArray(repositoryApp.about) && repositoryApp.about.map((row, index) => <div key={row + index}>{row}</div>)}
+                    {Array.isArray(repositoryApp.about) &&
+                      repositoryApp.about.map((row, index) => <div key={row + index}>{row}</div>)}
                     {typeof repositoryApp.about === 'string' && repositoryApp.about}
                   </div>
                 </div>
@@ -210,7 +211,9 @@ function AppPage() {
                   <div className="my-6 bg-core-black-contrast-3 h-[2px] w-full" />
                   <h5 className="mb-3">Repository URL</h5>
                   <div className="text-core-grey-60 mb-3">
-                    <a className="underline" href={repositoryApp.repository_url}>{repositoryApp.repository_url}</a>
+                    <a className="underline" href={repositoryApp.repository_url}>
+                      {repositoryApp.repository_url}
+                    </a>
                   </div>
                 </div>
               )}
@@ -236,7 +239,9 @@ function AppPage() {
                       </a>
                       <div className="text-core-grey-60">{app.update}</div>
                       {app.release_notes && (
-                        <div className="text-core-grey-60 mt-2"><ReactMarkdown>{app.release_notes}</ReactMarkdown></div>
+                        <div className="text-core-grey-60 mt-2">
+                          <ReactMarkdown>{app.release_notes}</ReactMarkdown>
+                        </div>
                       )}
                     </div>
                   ))}

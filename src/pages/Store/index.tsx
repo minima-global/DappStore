@@ -27,9 +27,9 @@ function Store() {
           const data = hexToBase64(response.load.data);
 
           sql(
-            `UPDATE repositories SET name = ${escape(data.name)}, icon ${escape(data.icon)} WHERE id = ${escape(
+            `UPDATE repositories SET name = ${escape(data.name)}, icon = ${escape(data.icon)} WHERE id = ${escape(
               params.id
-            )})`
+            )}`
           ).then(() => {
             setData(data);
           });
@@ -243,7 +243,8 @@ function Store() {
                     <div className="flex-grow flex items-center px-4 truncate overflow-hidden min-w-[0]">
                       <div className="overflow-hidden truncate">
                         <div className="text-ellipsis overflow-hidden whitespace-nowrap mb-1">
-                          {app.name} {app.version ? <span className="ml-1.5 font-bold text-sm">({app.version})</span> : ''}
+                          {app.name}{' '}
+                          {app.version ? <span className="ml-1.5 font-bold text-sm">({app.version})</span> : ''}
                         </div>
                         <div className="text-xs text-core-grey-80 truncate overflow-hidden">{app.description}</div>
                       </div>
