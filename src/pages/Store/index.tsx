@@ -1,5 +1,5 @@
 import { escape } from "sqlstring";
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import { appContext } from '../../AppContext';
 import Modal from '../../components/UI/Modal';
@@ -212,8 +212,11 @@ function Store() {
                 const installedVersion = isInstalled ? Number(isInstalled.conf.version.split('.').join('')) : false;
                 const updateAvailable = installedVersion ? repositoryVersion > installedVersion : false;
 
+                // isLinkable, only show app link if the app has a description
+                const isLinkable = app.history;
+
                 return (
-                  <div key={app.name} className="bg-core-black-contrast-2 rounded flex justify-start items-left h-full">
+                  <Link to={`${isLinkable ? `/store/${params.id}/${app.name}` : '#'}`} key={app.name} className={`bg-core-black-contrast-2 rounded flex justify-start items-left h-full ${isLinkable ? 'cursor-pointer' : 'cursor-default'}`}>
                     <div
                       className="w-[66px] h-[64px] min-w-[64px] rounded bg-contain"
                       style={{
@@ -279,7 +282,7 @@ function Store() {
                         </button>
                       )}
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
           </div>

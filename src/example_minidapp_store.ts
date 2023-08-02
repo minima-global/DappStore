@@ -12,7 +12,7 @@ export const exampleMiniDappStoreJson = {
       "name": "Script IDE",
       "date": "Jul 24, 2023",
       "description": "Minima Test Minidapp",
-      "repository_url": "(optiona)https://",
+      "repository_url": "(optional)https://",
       "version": "1.0.0",
       "about": "...",
       "screenshots": [
@@ -41,5 +41,5 @@ export const exampleMiniDappStoreJson = {
       "update": null,
       "history": null
     }
-  ]
+  ],
 };

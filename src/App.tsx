@@ -10,15 +10,17 @@ import BadgeNotification from './components/BadgeNotification';
 import AppIsInReadMode from "./components/AppIsInReadMode";
 
 function App() {
+  const isDesktop = window.outerWidth > 720;
+
   return (
     <HashRouter>
       <AppProvider>
         <Splash />
         <AppIsInReadMode />
-        <SlideRoutes duration={150}>
+        <SlideRoutes duration={isDesktop ? 0 : 150}>
           <Route path="/" element={<Home />} />
           <Route path="/store/:id" element={<Store />} />
-          <Route path="/app/:id" element={<AppPage />} />
+          <Route path="/store/:id/:name" element={<AppPage />} />
         </SlideRoutes>
         <BadgeNotification />
       </AppProvider>

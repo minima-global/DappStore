@@ -108,7 +108,7 @@ function Home() {
         <Modal display={displayAddStore} frosted={true}>
           <div className="flex flex-col gap-3 text-center">
             <h1 className="text-2xl mb-3">Add a MiniDapp store</h1>
-            <p className="mb-4">Dapp stores are a collection of MiniDapps that can be installed on your node.</p>
+            <p className="mb-4">Please enter the public URL to a Dapp store JSON file</p>
             <div className="mb-4 text-left">
               {error && (
                 <div className="p-3 bg-red-950 bg-opacity-10 text-status-red font-bold rounded text-sm border border-status-red mb-4">
@@ -194,10 +194,14 @@ function Home() {
         <TitleBar>
           <div>
             <button
-              onClick={() => setAddOwnStore(true)}
-              className="w-full border border-white text-sm h-[32px] px-2 lg:px-3 w-fit w-full rounded font-bold"
+              onClick={(evt) => {
+                evt.stopPropagation();
+                setAddOwnStore(true);
+              }}
+              className="w-full flex gap-3 items-center text-sm lg:text-base h-[32px] md:pr-2 w-fit w-full rounded font-bold"
             >
-              Create your own store
+              <img src="/assets/info.svg" />
+              Learn more
             </button>
           </div>
         </TitleBar>

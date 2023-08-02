@@ -26,6 +26,7 @@
     "react": "^18.2.0",
     "react-clipboard.js": "^2.0.16",
     "react-dom": "^18.2.0",
+    "react-markdown": "^8.0.7",
     "react-router-dom": "^6.11.2",
     "react-slide-routes": "^3.0.3",
     "react-spring": "^9.7.1",
