@@ -28,6 +28,7 @@ function AppPage() {
       i.conf.description.toLowerCase() === params.name?.toLowerCase()
   );
 
+  // fetches json incase user directly visits this page
   useEffect(() => {
     if (repository && !data) {
       downloadFile(repository.URL).then(function (response: any) {
@@ -82,6 +83,7 @@ function AppPage() {
     }
   };
 
+  // works out if update is available based on the installed version and the version in the repo
   const repositoryVersion = repositoryApp && Number(repositoryApp.version.split('.').join(''));
   const installedVersion = installedApp ? Number(installedApp.conf.version.split('.').join('')) : false;
   const updateAvailable = installedVersion ? repositoryVersion > installedVersion : false;
