@@ -7,6 +7,7 @@ import Store from "./pages/Store";
 import AppPage from "./pages/AppPage";
 import Splash from './components/Splash';
 import BadgeNotification from './components/BadgeNotification';
+import AppIsInReadMode from "./components/AppIsInReadMode";
 
 function App() {
   const isDesktop = window.outerWidth > 720;
@@ -15,6 +16,7 @@ function App() {
     <HashRouter>
       <AppProvider>
         <Splash />
+        <AppIsInReadMode />
         <SlideRoutes duration={isDesktop ? 0 : 150}>
           <Route path="/" element={<Home />} />
           <Route path="/store/:id" element={<Store />} />

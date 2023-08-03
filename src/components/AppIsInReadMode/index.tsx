@@ -1,12 +1,25 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useTransition, animated } from '@react-spring/web';
 import { appContext } from '../../AppContext';
 import { modalAnimation } from '../../animations';
+import Button from '../UI/Button';
+import { IS_MINIMA_BROWSER } from '../../env';
 
 export function AppIsInReadMode() {
   const { appIsInWriteMode } = useContext(appContext);
-  const display = appIsInWriteMode === false;
+  const [dismissed, setDismissed] = useState(false);
+  const display = appIsInWriteMode === false && !dismissed;
   const transition: any = useTransition(display, modalAnimation as any);
+
+  const goToMiniHub = async () => {
+    if (IS_MINIMA_BROWSER) {
+      return Android.closeWindow();
+    }
+  };
+
+  const dismiss = () => {
+    setDismissed(true);
+  };
 
   return (
     <div>
@@ -24,6 +37,16 @@ export function AppIsInReadMode() {
                         <li>&#x2022; Read which MiniDapps are installed</li>
                         <li>&#x2022; Install and update MiniDapps</li>
                       </ul>
+                    </div>
+                    <div className="max-w-xs mx-auto mt-10 flex flex-col gap-3">
+                      {IS_MINIMA_BROWSER && (
+                        <Button onClick={goToMiniHub} variant="primary" sizing="small">
+                          Back to Hub
+                        </Button>
+                      )}
+                      <Button onClick={dismiss} variant="secondary" sizing="small">
+                        Continue in read mode
+                      </Button>
                     </div>
                   </div>
                 </animated.div>

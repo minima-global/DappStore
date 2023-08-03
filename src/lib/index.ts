@@ -33,6 +33,10 @@ export function sql(query: string) {
   return promisify(MDS.sql, query);
 }
 
+export function dAppLink(dAppName: string): any {
+  return promisify(MDS.dapplink, dAppName);
+}
+
 export function deleteFileFromWeb(filePath: string): Promise<any> {
   return new Promise((resolve, reject) => {
     return (window as any).MDS.file.copytoweb(filePath, `/mywebfiles/${filePath.split('/').pop()}`, function (resp) {
