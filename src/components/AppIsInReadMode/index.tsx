@@ -19,7 +19,11 @@ export function AppIsInReadMode() {
                   <div className="text-center text-white pb-12 px-4">
                     <div className="text-2xl mb-4">App is in read mode</div>
                     <div className="text-sm text-core-grey-80">
-                      Please ensure that the MiniDapp Store MiniDapp has write permission
+                      The MiniDapp store requires write permission to
+                      <ul className="mt-6">
+                        <li>&#x2022; Read which MiniDapps are installed</li>
+                        <li>&#x2022; Install and update MiniDapps</li>
+                      </ul>
                     </div>
                   </div>
                 </animated.div>
