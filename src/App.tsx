@@ -16,7 +16,6 @@ function App() {
     <HashRouter>
       <AppProvider>
         <Splash />
-        <AppIsInReadMode />
         <SlideRoutes duration={isDesktop ? 0 : 150}>
           <Route path="/" element={<Home />} />
           <Route path="/store/:id" element={<Store />} />
