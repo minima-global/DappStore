@@ -7,7 +7,6 @@ import Store from "./pages/Store";
 import AppPage from "./pages/AppPage";
 import Splash from './components/Splash';
 import BadgeNotification from './components/BadgeNotification';
-import AppIsInReadMode from "./components/AppIsInReadMode";
 
 function App() {
   const isDesktop = window.outerWidth > 720;
