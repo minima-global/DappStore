@@ -33,7 +33,7 @@ export default ({ mode }) => {
       createHtmlPlugin({
         inject: {
           data: {
-            title: capitalize(packageJson.name),
+            title: packageJson.name.split('_').map(capitalize).join(' '),
             devEnv,
           },
         },

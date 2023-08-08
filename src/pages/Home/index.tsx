@@ -10,6 +10,7 @@ import { escape } from 'sqlstring';
 import { IS_MINIMA_BROWSER } from "../../env";
 import { exampleMiniDappStoreJson } from "../../example_minidapp_store";
 import { toHex } from "../../utilities";
+import StorePanel from "../../components/StorePanel/StorePanel";
 
 function Home() {
   const { loaded, sort, repositories, getRepositories } = useContext(appContext);
@@ -109,7 +110,7 @@ function Home() {
           <div className="flex flex-col gap-3 text-center">
             <h1 className="text-2xl mb-3">Add a MiniDapp store</h1>
             <p className="mb-4">Dapp stores are a collection of MiniDapps that can be installed on your node.</p>
-            <p className="mb-4">Please enter the public URL to a Dapp store JSON file</p>
+            <p className="mb-4">Please enter the public URL of a Dapp store JSON file.</p>
             <div className="mb-4 text-left">
               {error && (
                 <div className="p-3 bg-red-950 bg-opacity-10 text-status-red font-bold rounded text-sm border border-status-red mb-4">
@@ -183,7 +184,7 @@ function Home() {
               <li>Add a new store into your Dapp Store MiniDapp by pasting in the public URL of the json file</li>
               <li>Share your URL with friends so they can add your store to their node!</li>
             </ol>
-            <Button onClick={downloadExample} variant="primary">Download Example JSON</Button>
+            <Button onClick={downloadExample} variant="primary">Download example JSON</Button>
             <Button
               variant="secondary"
               onClick={() => setAddOwnStore(false)}
@@ -306,18 +307,7 @@ function Home() {
           </div>
           {orderedRepositories.map((repository) => (
             <Link key={repository.ID} to={`/store/${repository.ID}`} className="overflow-hidden flex-grow lg:px-0">
-              <div className="bg-core-black-contrast-2 rounded overflow-hidden flex items-stretch justify-start h-full">
-                <div
-                  className="w-[64px] min-w-[64px] rounded bg-cover"
-                  style={{
-                    backgroundImage: `url('${repository.ICON}'), url('./assets/app.png')`,
-                  }}
-                />
-                <div className="bg-core-black-contrast-2 grow p-3 px-4 w-full overflow-hidden">
-                  <h5 className="font-bold mb-0.5">{repository.NAME}</h5>
-                  <p className="text-xs text-core-grey-80 text-ellipsis truncate">{repository.NAME}</p>
-                </div>
-              </div>
+              <StorePanel repository={repository} />
             </Link>
           ))}
           {!hasMoreThanOneStore && (
