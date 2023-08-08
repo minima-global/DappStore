@@ -1,6 +1,6 @@
 # Changelog
 
-##### [1.0.5] - 03 August 23
+##### [1.0.5] - 08 August 23
 
 - Minor text changes
 
