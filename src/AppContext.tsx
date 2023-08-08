@@ -2,7 +2,6 @@ import * as React from 'react';
 import { createContext, useCallback, useEffect, useRef, useState } from 'react';
 import { downloadFile, hexToBase64, isWriteMode, loadBinary, mds, sql } from "./lib";
 import { escape } from "sqlstring";
-import { patchOne } from "./patches/patches";
 
 export const appContext = createContext<any>({});
 

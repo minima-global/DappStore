@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { downloadFile, hexToBase64, loadBinary, sql } from '../../lib';
+import { downloadFile, hexToBase64, loadBinary } from '../../lib';
 
 function StorePanel({ repository }) {
-  const [data, setData] = useState({});
+  const [data, setData] = useState<Record<string, string>>({});
 
   useEffect(() => {
     downloadFile(repository.URL).then(function (response: any) {
