@@ -1,5 +1,9 @@
 # Changelog
 
+##### [1.0.5] - 03 August 23
+
+- Minor text changes
+
 ##### [1.0.0] - 03 August 23
 
 - Updated "App is in read mode" text content
