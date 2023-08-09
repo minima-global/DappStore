@@ -1,6 +1,6 @@
 # Changelog
 
-##### [1.0.5] - 09 August 23
+##### [1.0.6] - 09 August 23
 
 - You can now share Dapp stores that have been added
 
