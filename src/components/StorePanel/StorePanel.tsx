@@ -4,6 +4,13 @@ import { downloadFile, hexToBase64, loadBinary } from '../../lib';
 function StorePanel({ repository }) {
   const [data, setData] = useState<Record<string, string>>({});
 
+  /**
+   * This may have to be reworked if the store json file is the same name
+   * and store panel loads multiple stores at the same time and the files
+   * get overwritten. e.g. if store.json (a) and store.json (b) are downloaded
+   * at the same time. The way to get around this at the moment is to give
+   * the json file a unique name e.g. store_a.json and store_b.json
+   */
   useEffect(() => {
     downloadFile(repository.URL).then(function (response: any) {
       loadBinary(response.download.file).then(function (response: any) {
