@@ -200,7 +200,7 @@ function Home() {
                 evt.stopPropagation();
                 setAddOwnStore(true);
               }}
-              className="w-full flex gap-3 items-center text-sm lg:text-base h-[32px] md:pr-2 w-fit w-full rounded font-bold"
+              className="w-full flex gap-3 items-center text-xs md:text-base h-[32px] md:pr-2 w-fit w-full rounded font-bold"
             >
               Create your own store
               <img src="./assets/info.svg" />
