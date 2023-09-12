@@ -1,5 +1,9 @@
 # Changelog
 
+##### [1.0.8] - 12 September 23
+
+- update mds.js
+
 ##### [1.0.6] - 09 August 23
 
 - You can now share Dapp stores that have been added
