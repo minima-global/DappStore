@@ -80,9 +80,9 @@ const Splash = () => {
                 className="inline-block min-w-[20px] min-h-5 h-5 w-5 appearance-none border border-grey checked:bg-white checked:border-white  checked:text-white"
               />
             </div>
-            I confirm that I have fully read and understood the MiniDapp Terms of Use. I unconditionally agree to comply
-            with these Terms including any future changes. This commitment is irrevocable and applies to all my
-            interactions with Minima, eliminating the need for repeated confirmations with each use.
+            I confirm that I have fully read and understood the MiniDapp Terms of Use and agree to comply with these
+            Terms including any future changes. This commitment is irrevocable and applies to all my interactions with
+            Minima, eliminating the need for repeated confirmations with each use.
           </label>
         </div>
         <div className="hidden lg:block mt-16">
