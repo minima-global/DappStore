@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { appContext } from '../../../AppContext';
-import { get, set } from "../../../lib";
+import { get, set } from '../../../lib';
 
 function useSplash() {
   const { loaded } = useContext(appContext);

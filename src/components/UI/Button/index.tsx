@@ -8,8 +8,15 @@ type ButtonProps = {
   sizing?: 'small' | 'base';
 };
 
-const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({ loading = false, sizing = 'base', disabled = false, variant = 'primary', onClick = undefined, children }) => {
-  let base = 'relative w-full rounded font-bold disabled:opacity-40 disabled:cursor-not-allowed';
+const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({
+  loading = false,
+  sizing = 'base',
+  disabled = false,
+  variant = 'primary',
+  onClick = undefined,
+  children,
+}) => {
+  let base = 'relative w-full rounded font-bold disabled:opacity-40 disabled:cursor-not-allowed ';
 
   if (sizing === 'small') {
     base += ' px-1.5 py-2.5';
