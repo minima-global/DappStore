@@ -1,5 +1,5 @@
 // debug to reset to check if notifications are being triggered
-var CLEAR = false;
+var DEBUG = false;
 
 function getInstalledApps(callback) {
   MDS.cmd(`mds`, function (resp) {
@@ -65,10 +65,7 @@ MDS.init(function (msg) {
                       var result = compareSemver(installed.conf.version, version);
 
                       if (result) {
-                        // clear will delete the previously set version for the minidapp so that it will re-trigger
-                        // the notification. This is used to test if notifications are being triggered correctly instead
-                        // of having to reinstall the app
-                        if (!clear) {
+                        if (!DEBUG) {
                           // get the last version that was notified to the user
                           // a) send notification if a version was never sent
                           // b) if last notification was the same version, do not resend notification
@@ -80,7 +77,12 @@ MDS.init(function (msg) {
                               MDS.keypair.set('notification_' + name, version);
                             }
                           });
-                        } else {
+                        }
+
+                        // setting DEBUG to true will clear the previous set version for this current minidapp so that it can re-trigger
+                        // the notification. This can be used to test if notifications are being triggered correctly instead
+                        // of having to delete and reinstall the app to clear keypair items
+                        if (DEBUG) {
                           MDS.keypair.set('notification_' + name, '', function (msg) {
                             console.log('reset!');
                             MDS.keypair.get('notification_' + name, function (msg) {
