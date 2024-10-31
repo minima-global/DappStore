@@ -65,10 +65,10 @@ MDS.init(function (msg) {
                       var result = compareSemver(installed.conf.version, version);
 
                       if (result) {
+                        // get the last version that was notified to the user
+                        // a) send notification if a version was never sent
+                        // b) if last notification was the same version, do not resend notification
                         if (!DEBUG) {
-                          // get the last version that was notified to the user
-                          // a) send notification if a version was never sent
-                          // b) if last notification was the same version, do not resend notification
                           MDS.keypair.get('notification_' + name, function (msg) {
                             var notificationLastSent = msg.value;
 
