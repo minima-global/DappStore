@@ -1,5 +1,9 @@
 # Changelog
 
+##### [1.0.9] - 31 October 24
+
+- added terms of use to splash screen
+
 ##### [1.0.8] - 12 September 23
 
 - update mds.js
