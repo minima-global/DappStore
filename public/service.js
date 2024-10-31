@@ -1,3 +1,6 @@
+// debug to reset to check if notifications are being triggered
+var CLEAR = false;
+
 function getInstalledApps(callback) {
   MDS.cmd(`mds`, function (resp) {
     callback(resp.response.minidapps);
@@ -17,6 +20,7 @@ function compareSemver(v1, v2) {
   if (patch1 !== patch2) {
     return patch1 > patch2 ? 1 : -1;
   }
+
   return 0;
 }
 
@@ -61,9 +65,6 @@ MDS.init(function (msg) {
                       var result = compareSemver(installed.conf.version, version);
 
                       if (result) {
-                        // debug to reset to check if notifications are being triggered
-                        var clear = false;
-
                         // clear will delete the previously set version for the minidapp so that it will re-trigger
                         // the notification. This is used to test if notifications are being triggered correctly instead
                         // of having to reinstall the app
