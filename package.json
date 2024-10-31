@@ -12,11 +12,15 @@
     "package": "bash ./create-minima-app/package.sh",
     "postbuild": "node ./create-minima-app/postbuild.js",
     "copysrc": "bash ./create-minima-app/copySrcToBuild.sh",
-    "zip": "npm run build && npm run postbuild && npm run copysrc && npm run package",
-    "src:zip": "bash create-minima-app/zip.sh"
+    "zip": "node --no-warnings --insecure-http-parser --http-parser=legacy ./create-minima-app/scripts.js zip",
+    "minima:install": "node --no-warnings --insecure-http-parser --http-parser=legacy ./create-minima-app/scripts.js install",
+    "minima:update": "npm run zip && node --no-warnings --insecure-http-parser --http-parser=legacy ./create-minima-app/scripts.js update",
+    "minima:uninstall": "node --no-warnings --insecure-http-parser --http-parser=legacy ./create-minima-app/scripts.js uninstall",
+    "minima:refresh": "npm run zip && npm run uninstall && npm run install"
   },
   "dependencies": {
     "@types/lodash": "^4.14.195",
+    "archiver": "^7.0.1",
     "axios": "^1.4.0",
     "date-fns": "^2.30.0",
     "embla-carousel-react": "^8.0.0-rc05",

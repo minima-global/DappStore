@@ -6,7 +6,7 @@ import Modal from '../../components/UI/Modal';
 import Button from '../../components/UI/Button';
 import TitleBarBack from '../../components/TitleBarBack';
 import { downloadFile, hexToBase64, loadBinary, sql } from '../../lib';
-import { downloadAndInstallMDSFile, downloadAndUpdateMDSFile } from '../../utilities';
+import { compareSemver, downloadAndInstallMDSFile, downloadAndUpdateMDSFile } from '../../utilities';
 import { IS_MINIMA_BROWSER } from '../../env';
 
 function Store() {
@@ -290,7 +290,7 @@ function Store() {
                 // the update button should show
                 const repositoryVersion = Number(app.version.split('.').join(''));
                 const installedVersion = isInstalled ? Number(isInstalled.conf.version.split('.').join('')) : false;
-                const updateAvailable = installedVersion ? repositoryVersion > installedVersion : false;
+                const updateAvailable = installedVersion ? compareSemver(installedVersion, repositoryVersion) : false;
 
                 // isLinkable, only show app link if the app has a description
                 const isLinkable = app.manifest_version === 2 || app.update || app.history;

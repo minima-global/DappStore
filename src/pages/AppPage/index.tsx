@@ -7,7 +7,7 @@ import TitleBarBack from '../../components/TitleBarBack';
 import Modal from '../../components/UI/Modal';
 import Button from '../../components/UI/Button';
 import { downloadFile, hexToBase64, loadBinary, sql } from '../../lib';
-import { downloadAndInstallMDSFile, downloadAndUpdateMDSFile } from '../../utilities';
+import { compareSemver, downloadAndInstallMDSFile, downloadAndUpdateMDSFile } from '../../utilities';
 
 function AppPage() {
   const params = useParams();
@@ -95,7 +95,7 @@ function AppPage() {
   // works out if update is available based on the installed version and the version in the repo
   const repositoryVersion = repositoryApp && Number(repositoryApp.version.split('.').join(''));
   const installedVersion = installedApp ? Number(installedApp.conf.version.split('.').join('')) : false;
-  const updateAvailable = installedVersion ? repositoryVersion > installedVersion : false;
+  const updateAvailable = installedVersion ? compareSemver(installedVersion, repositoryVersion) : false;
 
   return (
     <div className="relative app text-white">
