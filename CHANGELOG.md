@@ -2,11 +2,11 @@
 
 ##### [1.1.0] - 01 November 24
 
-- added notifications when application updates are available
+- added notifications when MiniDapp updates are available- there is a settings modal where the MiniDapp update available notification option can be disabled
 
 ##### [1.0.9] - 31 October 24
 
-- added terms of use to splash screen
+- added terms of use to the splash screen
 
 ##### [1.0.8] - 12 September 23
 
