@@ -11,7 +11,7 @@ export const Settings = ({ close }) => {
   }, []);
 
   const toggleNotifications = () => {
-    MDS.keypair.set('notifications_enabled', !enableNotifications ? '1' : '0', function (msg) {
+    MDS.keypair.set('notifications_enabled', !enableNotifications ? '1' : '0', function () {
       setEnableNotifications((prevState) => !prevState);
     });
   };
