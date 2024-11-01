@@ -7,10 +7,10 @@ import Button from '../../components/UI/Button';
 import { downloadFile, hexToBase64, loadBinary, sql } from '../../lib';
 import { appContext } from '../../AppContext';
 import { escape } from 'sqlstring';
-import { IS_MINIMA_BROWSER } from "../../env";
-import { exampleMiniDappStoreJson } from "../../example_minidapp_store";
-import { toHex } from "../../utilities";
-import StorePanel from "../../components/StorePanel/StorePanel";
+import { IS_MINIMA_BROWSER } from '../../env';
+import { exampleMiniDappStoreJson } from '../../example_minidapp_store';
+import { toHex } from '../../utilities';
+import StorePanel from '../../components/StorePanel/StorePanel';
 
 function Home() {
   const { loaded, sort, repositories, getRepositories } = useContext(appContext);
@@ -82,7 +82,6 @@ function Home() {
 
   const downloadExample = () => {
     if (IS_MINIMA_BROWSER) {
-
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       Android.blobDownload('example_dapp_store.json', toHex(JSON.stringify(exampleMiniDappStoreJson, null, 4)));
@@ -184,11 +183,10 @@ function Home() {
               <li>Add a new store into your Dapp Store MiniDapp by pasting in the public URL of the json file</li>
               <li>Share your URL with friends so they can add your store to their node!</li>
             </ol>
-            <Button onClick={downloadExample} variant="primary">Download example JSON</Button>
-            <Button
-              variant="secondary"
-              onClick={() => setAddOwnStore(false)}
-            >
+            <Button onClick={downloadExample} variant="primary">
+              Download example JSON
+            </Button>
+            <Button variant="secondary" onClick={() => setAddOwnStore(false)}>
               Close
             </Button>
           </div>
@@ -205,6 +203,7 @@ function Home() {
               Create your own store
               <img src="./assets/info.svg" />
             </button>
+            <button>C</button>
           </div>
         </TitleBar>
         <div className="relative pt-2 p-4 flex flex-col gap-4 max-w-xl mx-auto h-full">
