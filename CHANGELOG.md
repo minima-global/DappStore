@@ -1,5 +1,9 @@
 # Changelog
 
+##### [1.1.0] - 01 November 24
+
+- added notifications when application updates are available
+
 ##### [1.0.9] - 31 October 24
 
 - added terms of use to splash screen

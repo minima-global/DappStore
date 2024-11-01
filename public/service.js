@@ -48,84 +48,88 @@ function main() {
   // 3) iterate through repos to retrieve the json from the URL
   // 4) iterate through each minidapp and ensure that they are installed and do a semver check
   // 5) based on results, action if notification should be sent
-  getInstalledApps(function (installedApps) {
-    getUrls(function (jsonUrls) {
-      for (var repo of jsonUrls) {
-        MDS.net.GET(repo, function (resp) {
-          // ensure json is a minidapp repo
-          if (resp && resp.response) {
-            const json = JSON.parse(resp.response);
+  MDS.keypair.get('notifications_enabled', function (msg) {
+    if (msg.value === '1') {
+      getInstalledApps(function (installedApps) {
+        getUrls(function (jsonUrls) {
+          for (var repo of jsonUrls) {
+            MDS.net.GET(repo, function (resp) {
+              // ensure json is a minidapp repo
+              if (resp && resp.response) {
+                const json = JSON.parse(resp.response);
 
-            for (var minidapp of json.dapps) {
-              try {
-                var name = minidapp.name;
-                var version = minidapp.version;
-                var installed = installedApps.find((i) => i.conf.name === name);
+                for (var minidapp of json.dapps) {
+                  try {
+                    var name = minidapp.name;
+                    var version = minidapp.version;
+                    var installed = installedApps.find((i) => i.conf.name === name);
 
-                if (installed) {
-                  var result = compareSemver(installed.conf.version, version);
+                    if (installed) {
+                      var result = compareSemver(installed.conf.version, version);
 
-                  if (result) {
-                    // get the last version that was notified to the user
-                    // a) send notification if a version was never sent
-                    // b) if last notification was the same version, do not resend notification
-                    if (!DEBUG) {
-                      MDS.keypair.get('notification_' + name, function (msg) {
-                        var notificationLastSent = msg.value;
+                      if (result) {
+                        // get the last version that was notified to the user
+                        // a) send notification if a version was never sent
+                        // b) if last notification was the same version, do not resend notification
+                        if (!DEBUG) {
+                          MDS.keypair.get('notification_' + name, function (msg) {
+                            var notificationLastSent = msg.value;
 
-                        if (notificationLastSent !== version) {
-                          MDS.notify('There is a new version of ' + name + ' available! (' + version + ')');
-                          MDS.keypair.set('notification_' + name, version);
+                            if (notificationLastSent !== version) {
+                              MDS.notify('There is a new version of ' + name + ' available! (' + version + ')');
+                              MDS.keypair.set('notification_' + name, version);
+                            }
+                          });
                         }
-                      });
-                    }
 
-                    // setting DEBUG to true will clear the previous set version for this current minidapp so that it can re-trigger
-                    // the notification. This can be used to test if notifications are being triggered correctly instead
-                    // of having to delete and reinstall the app to clear keypair items
-                    if (DEBUG) {
-                      MDS.keypair.set('notification_' + name, '', function (msg) {
-                        console.log('reset!');
-                        MDS.keypair.get('notification_' + name, function (msg) {
-                          var notificationLastSent = msg.value;
+                        // setting DEBUG to true will clear the previous set version for this current minidapp so that it can re-trigger
+                        // the notification. This can be used to test if notifications are being triggered correctly instead
+                        // of having to delete and reinstall the app to clear keypair items
+                        if (DEBUG) {
+                          MDS.keypair.set('notification_' + name, '', function (msg) {
+                            MDS.log('reset!');
+                            MDS.keypair.get('notification_' + name, function (msg) {
+                              var notificationLastSent = msg.value;
 
-                          if (notificationLastSent !== version) {
-                            MDS.notify('There is a new version of ' + name + ' available! (' + version + ')');
-                            MDS.keypair.set('notification_' + name, version);
-                          }
-                        });
-                      });
+                              if (notificationLastSent !== version) {
+                                MDS.notify('There is a new version of ' + name + ' available! (' + version + ')');
+                                MDS.keypair.set('notification_' + name, version);
+                              }
+                            });
+                          });
+                        }
+                      }
                     }
+                  } catch (err) {
+                    // do nothing if it fails
                   }
                 }
-              } catch (err) {
-                // do nothing if it fails
               }
-            }
+            });
           }
         });
-      }
-    });
+      });
+    }
   });
 }
 
 MDS.init(function (msg) {
   if (msg.event === 'inited') {
-    MDS.keypair.get('notification_enabled', function (msg) {
+    MDS.keypair.get('notifications_enabled', function (msg) {
       if (!msg.value) {
-        MDS.keypair.set('notification_enabled', '1');
+        main();
+        MDS.keypair.set('notifications_enabled', '1');
+      }
+
+      if (msg.value === '1') {
+        main();
       }
     });
-
-    main();
   } else if (msg.event === 'MDS_TIMER_1HOUR') {
     ticker = ticker + 1;
 
     if (ticker >= 3) {
       main();
-    }
-
-    if (ticker >= 3) {
       ticker = 0;
     }
   }
