@@ -1,5 +1,14 @@
 # Changelog
 
+##### [1.1.2] - 07 November 24
+
+- Notification that there are MiniDapp updates are now only sent once every 24 hours
+- Logic for displaying the terms of use has been revised
+
+##### [1.1.1] - 04 November 24
+
+- tweaks to the logic to how the terms of use is displayed
+
 ##### [1.1.0] - 01 November 24
 
 - added notifications when MiniDapp updates are available- there is a settings modal where the MiniDapp update available notification option can be disabled

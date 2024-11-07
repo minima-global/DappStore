@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createContext, useCallback, useEffect, useRef, useState } from 'react';
-import { downloadFile, hexToBase64, isWriteMode, loadBinary, mds, sql } from "./lib";
-import { escape } from "sqlstring";
+import { downloadFile, hexToBase64, isWriteMode, loadBinary, mds, sql } from './lib';
+import { escape } from 'sqlstring';
 
 export const appContext = createContext<any>({});
 
@@ -35,6 +35,7 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
           // const dropQuery = 'DROP TABLE \`repositories\`';
           // await sql(dropQuery);
           setInitSuccess(true);
+          getRepositories();
 
           isWriteMode().then((appIsInWriteMode) => {
             setAppIsInWriteMode(appIsInWriteMode);
@@ -44,7 +45,8 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
             }
           });
 
-          const dbQuery = 'CREATE TABLE IF NOT EXISTS \`repositories\` (`id` bigint auto_increment, `name` varchar(512) NOT NULL, `url` varchar(2048) NOT NULL, `icon` varchar(2048), `created_at` TIMESTAMP)';
+          const dbQuery =
+            'CREATE TABLE IF NOT EXISTS `repositories` (`id` bigint auto_increment, `name` varchar(512) NOT NULL, `url` varchar(2048) NOT NULL, `icon` varchar(2048), `created_at` TIMESTAMP)';
 
           /**
            * Create repositories db table if it does not exist
@@ -57,13 +59,13 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
              * Check if official repo is here
              */
             sql(check).then((response) => {
-
-              if(response.count === 0) {
-
+              if (response.count === 0) {
                 downloadFile(url).then(function (response: any) {
                   loadBinary(response.download.file).then(function (response: any) {
                     const data = hexToBase64(response.load.data);
-                    const query = `INSERT INTO \`repositories\` (name, url, icon) VALUES (${escape(data.name)}, ${escape(url)}, ${escape(data.icon)})`;
+                    const query = `INSERT INTO \`repositories\` (name, url, icon) VALUES (${escape(
+                      data.name
+                    )}, ${escape(url)}, ${escape(data.icon)})`;
 
                     sql(query).then(() => {
                       getRepositories();
@@ -78,14 +80,8 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     }
   }, [loaded, getRepositories, getMds]);
 
-  useEffect(() => {
-    if (loaded.current && initSuccess) {
-      getRepositories();
-    }
-  }, [loaded.current, initSuccess, getRepositories]);
-
   const value = {
-    loaded,
+    loaded: initSuccess,
     sort,
     setSort,
     getMds,

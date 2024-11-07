@@ -1,13 +1,14 @@
 import './index.css';
-import SlideRoutes from "react-slide-routes";
+import SlideRoutes from 'react-slide-routes';
 import { HashRouter, Route } from 'react-router-dom';
 import AppProvider from './AppContext';
 import Home from './pages/Home';
-import Store from "./pages/Store";
-import AppPage from "./pages/AppPage";
+import Store from './pages/Store';
+import AppPage from './pages/AppPage';
 import Splash from './components/Splash';
 import BadgeNotification from './components/BadgeNotification';
-import AppIsInReadMode from "./components/AppIsInReadMode";
+import AppIsInReadMode from './components/AppIsInReadMode';
+import TermsOfUse from './components/TermsOfUse';
 
 function App() {
   const isDesktop = window.outerWidth > 720;
@@ -16,6 +17,7 @@ function App() {
     <HashRouter>
       <AppProvider>
         <Splash />
+        <TermsOfUse />
         <AppIsInReadMode />
         <SlideRoutes duration={isDesktop ? 0 : 150}>
           <Route path="/" element={<Home />} />

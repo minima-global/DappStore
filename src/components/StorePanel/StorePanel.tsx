@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { downloadFile, hexToBase64, loadBinary } from '../../lib';
+import { appContext } from '../../AppContext';
 
 function StorePanel({ repository }) {
+  const { loaded } = useContext(appContext);
   const [data, setData] = useState<Record<string, string>>({});
 
   /**
@@ -12,13 +14,15 @@ function StorePanel({ repository }) {
    * the json file a unique name e.g. store_a.json and store_b.json
    */
   useEffect(() => {
-    downloadFile(repository.URL).then(function (response: any) {
-      loadBinary(response.download.file).then(function (response: any) {
-        const data = hexToBase64(response.load.data);
-        setData(data);
+    if (loaded) {
+      downloadFile(repository.URL).then(function (response: any) {
+        loadBinary(response.download.file).then(function (response: any) {
+          const data = hexToBase64(response.load.data);
+          setData(data);
+        });
       });
-    });
-  }, []);
+    }
+  }, [loaded, repository]);
 
   return (
     <div className="bg-core-black-contrast-2 rounded overflow-hidden flex items-stretch justify-start h-full">

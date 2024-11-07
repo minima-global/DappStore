@@ -7,7 +7,7 @@ function useSplash() {
   const [display, setDisplay] = useState(false);
 
   useEffect(() => {
-    if (loaded.current) {
+    if (loaded) {
       (async () => {
         get('SPLASH').then((response) => {
           if (response?.value === '1') {

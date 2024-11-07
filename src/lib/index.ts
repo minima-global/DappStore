@@ -2,7 +2,6 @@ export function promisify(fn: any, command: string, arg: any = undefined): any {
   return new Promise((resolve) => {
     if (arg) {
       fn(command, arg, function (response: any) {
-
         if (response.status) {
           return resolve(response);
         }
@@ -85,12 +84,11 @@ export function updateMiniDapp(filePath: string, uid: string, trust: 'write' | '
   });
 }
 
-
 export function downloadFile(url: string): Promise<any> {
   return new Promise((resolve, reject) => {
     (window as any).MDS.file.download(url, function (resp: any) {
       if (resp.status) {
-        resolve(resp.response);
+        return resolve(resp.response);
       }
 
       return reject();

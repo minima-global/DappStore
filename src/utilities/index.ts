@@ -19,20 +19,21 @@ export function toHex(str) {
   return result.toUpperCase();
 }
 
-export const compareSemver = (v1: string | number, v2: string | number) => {
-  const [major1, minor1, patch1] = String(v1).split('.').map(Number);
-  const [major2, minor2, patch2] = String(v2).split('.').map(Number);
+export function compareSemver(v1, v2) {
+  const [major1 = 0, minor1 = 0, patch1 = 0] = String(v1).split('.').map(Number);
+  const [major2 = 0, minor2 = 0, patch2 = 0] = String(v2).split('.').map(Number);
 
   if (major1 !== major2) {
-    return major1 > major2 ? 1 : -1;
+    return major1 > major2 ? false : true;
   }
   if (minor1 !== minor2) {
-    return minor1 > minor2 ? 1 : -1;
+    return minor1 > minor2 ? false : true;
   }
   if (patch1 !== patch2) {
-    return patch1 > patch2 ? 1 : -1;
+    return patch1 > patch2 ? false : true;
   }
+
   return false;
-};
+}
 
 export default {};
