@@ -288,7 +288,12 @@ function Store() {
 
                 // check if repo version is higher than installed version, this will dictate if
                 // the update button should show
-                const updateAvailable = compareSemver(isInstalled.conf.version, app.version);
+
+                const updateAvailable = false;
+
+                if (isInstalled) {
+                  compareSemver(isInstalled.conf.version, app.version);
+                }
 
                 // isLinkable, only show app link if the app has a description
                 const isLinkable = app.manifest_version === 2 || app.update || app.history;

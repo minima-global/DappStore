@@ -1,5 +1,9 @@
 # Changelog
 
+##### [1.1.3] - 07 November 24
+
+- Fixed issue with revised semver checker breaking read mode
+
 ##### [1.1.2] - 07 November 24
 
 - Notification that there are MiniDapp updates are now only sent once every 24 hours
