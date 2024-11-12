@@ -39,7 +39,11 @@ function Store() {
 
   useEffect(() => {
     if (repository && !data && loaded) {
-      if (params.id !== '1' && repository.URL.includes('https://minidapps.minima.global/data/community-dapps')) {
+      if (params.id !== '1' && repository.URL.includes('https://minidapps.minima.global/data/community-dapps-test.json')) {
+        setIsCommunityStore(true);
+      }
+
+      if (params.id !== '1' && repository.URL.includes('https://minidapps.minima.global/data/ecosystem-dapps.json')) {
         setIsCommunityStore(true);
       }
 
@@ -202,7 +206,7 @@ function Store() {
               </div>
             )}
             <Button onClick={handleDismissWarning} variant="primary">
-              Don't show me this again
+              I understand
             </Button>
           </div>
         </Modal>
@@ -327,12 +331,12 @@ function Store() {
           )}
           {params.id !== '1' && isCommunityStore && (
             <div className="bg-core-black-contrast-1 rounded p-4 text-sm font-bold">
-              Minima's Ecosystem MiniDapps have been scanned for viruses and malicious code, however Minima Global cannot guarantee that the apps in this store are bug free. Always use in READ mode unless you fully trust the developer.
+              Minima's Ecosystem MiniDapps have been scanned for viruses and malicious code, however Minima Global cannot guarantee that the apps in this store are bug free. Always use MiniDapps in READ mode unless you fully trust the developer.
             </div>
           )}
           {params.id !== '1' && !isCommunityStore && (
             <div className="bg-core-black-contrast-1 rounded p-4 text-sm font-bold">
-              Minima Global has not reviewed the apps in this Dapp Store and cannot guarantee that they are secure or bug free. Always use in READ mode unless you fully trust the developer.
+              Minima Global has not reviewed the apps in this Dapp Store and cannot guarantee that they are secure or bug free. Always use MiniDapps in READ mode unless you fully trust the developer.
             </div>
           )}
           {data && (

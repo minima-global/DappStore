@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.5] - 12 November 24
+
+- Additional tweaks to the warning message about installing apps in read mode when opening the third party store for the first time
+
 ##### [1.1.4] - 12 November 24
 
 - Added a warning message about installing apps in read mode when opening the third party store for the first time
