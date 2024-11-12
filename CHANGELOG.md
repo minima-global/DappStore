@@ -2,7 +2,7 @@
 
 ##### [1.1.4] - 12 November 24
 
-- Added a warning message about installing apps in read mode when installing from third party stores
+- Added a warning message about installing apps in read mode when opening the third party store for the first time
 
 ##### [1.1.3] - 07 November 24
 
