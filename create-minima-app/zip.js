@@ -5,7 +5,7 @@ import { fileName } from "./get-package-info.js";
 
 export async function zip() {
   return new Promise((resolve) => {
-    const output = fs.createWriteStream(`${dirName}/../${fileName}`);
+    const output = fs.createWriteStream(`${dirName}/../${fileName.split('_').map((word, index) => index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)).join('')}`);
     const archive = archiver("zip", {
       zlib: { level: 9 },
     });
