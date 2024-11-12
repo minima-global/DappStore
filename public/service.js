@@ -124,23 +124,31 @@ function main() {
 
 MDS.init(function (msg) {
   if (msg.event === 'inited') {
-    MDS.keypair.get('notifications_enabled', function (msg) {
-      if (!msg.value) {
-        // by default enable notifications
-        MDS.keypair.set('notifications_enabled', '1');
-
-        main();
-      }
-
-      if (msg.value === '1') {
-        main();
+    MDS.cmd(`checkmode`, function (response) {
+      if (response.status && response.response.mode === 'WRITE') {
+        MDS.keypair.get('notifications_enabled', function (msg) {
+          if (!msg.value) {
+            // by default enable notifications
+            MDS.keypair.set('notifications_enabled', '1');
+    
+            main();
+          }
+    
+          if (msg.value === '1') {
+            main();
+          }
+        });
       }
     });
   } else if (msg.event === 'MDS_TIMER_1HOUR') {
     ticker = ticker + 1;
 
     if (!sent) {
-      main();
+      MDS.cmd(`checkmode`, function (response) {
+        if (response.status && response.response.mode === 'WRITE') {
+          main();
+        }
+      });
     }
 
     if (ticker >= 24) {

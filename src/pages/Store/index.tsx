@@ -12,16 +12,18 @@ import { IS_MINIMA_BROWSER } from '../../env';
 function Store() {
   const params = useParams();
   const navigate = useNavigate();
-  const { appIsInWriteMode } = useContext(appContext);
+  const { appIsInWriteMode, loaded } = useContext(appContext);
   const [data, setData] = useState<any | null>(null);
   const { repositories, getRepositories, installedMiniDapps, getMds } = useContext(appContext);
   const repository = repositories.find((i) => i.ID === params.id);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showDeleteStore, setShowDeleteStore] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
   const [spinners, setSpinners] = useState<Record<string, boolean>>({});
   const [errorResponseModal, setErrorResponseModal] = useState<string | false>(false);
   const [copied, setCopied] = useState<boolean>(false);
+  const [isCommunityStore, setIsCommunityStore] = useState<boolean>(false);
 
   useEffect(() => {
     if (copied) {
@@ -36,7 +38,11 @@ function Store() {
   }, [copied]);
 
   useEffect(() => {
-    if (repository && !data) {
+    if (repository && !data && loaded) {
+      if (params.id !== '1' && repository.URL.includes('https://minidapps.minima.global/data/community-dapps')) {
+        setIsCommunityStore(true);
+      }
+
       downloadFile(repository.URL).then(function (response: any) {
         loadBinary(response.download.file).then(function (response: any) {
           const data = hexToBase64(response.load.data);
@@ -48,10 +54,24 @@ function Store() {
           ).then(() => {
             setData(data);
           });
+        }).catch(() => {
+          // do nothing if it fails
         });
+      }).catch(() => {
+        // do nothing if it fails
       });
     }
-  }, [repository, params.id]);
+  }, [repository, params.id, loaded]);
+
+  useEffect(() => {
+    if (params.id !== '1' && loaded) {
+      MDS.keypair.get('store_warning_' + params.id, function (msg) {
+        if (!msg.value) {
+          setShowWarning(true);
+        }
+      });
+    }
+  }, [params.id, loaded]);
 
   const deleteDappStore = () => {
     setDeleteError(null);
@@ -130,6 +150,11 @@ function Store() {
     setCopied(true);
   };
 
+  const handleDismissWarning = () => {
+    setShowWarning(false);
+    MDS.keypair.set('store_warning_' + params.id, '1');
+  };
+
   return (
     <div className="relative app text-white overflow-hidden inline-grid">
       <div className="overflow-hidden">
@@ -138,6 +163,49 @@ function Store() {
             Copied to clipboard
           </div>
         </div>
+        <Modal display={showWarning} frosted={true}>
+          <div className="flex flex-col gap-3 text-center">
+            {isCommunityStore && (
+              <div>
+                <h1 className="text-lg font-bold mb-4">Attention: Minidapp Permissions</h1>
+                <div className="text-sm mb-4 flex flex-col gap-2">
+                  
+                  <p className="font-bold">
+                    Minima's Ecosystem MiniDapps have been scanned for viruses and malicious code, however Minima Global cannot guarantee that the apps in this store are bug free.
+                  </p>
+                  <p>
+                    For security, all MiniDapps are installed with READ ONLY access to your wallet, and will require your approval for any transaction it attempts to make.
+                  </p>
+                  <p>
+                    <span className="font-bold">If a MiniDapp requests WRITE access - you should only grant this if you fully trust the developer.</span> Granting WRITE permissions allows the MiniDapp to interact directly with your wallet, which could affect your funds.
+                  </p>
+                  <p className="font-bold">You are responsible for the security of your node.</p>
+                </div>
+              </div>
+            )}
+            {!isCommunityStore && (
+              <div>
+                <h1 className="text-lg font-bold mb-4">Attention: Minidapp Permissions</h1>
+                <div className="text-sm mb-4 flex flex-col gap-2">
+                  
+                  <p className="font-bold">
+                    Minima Global has not reviewed the apps in this Dapp store and cannot guarantee that they are secure or bug free.
+                  </p>
+                  <p>
+                    For security, all MiniDapps are installed with READ ONLY access to your wallet, and will require your approval for any transaction it attempts to make.
+                  </p>
+                  <p>
+                    <span className="font-bold">If a MiniDapp requests WRITE access - you should only grant this if you fully trust the developer.</span> Granting WRITE permissions allows the MiniDapp to interact directly with your wallet, which could affect your funds.
+                  </p>
+                  <p className="font-bold">You are responsible for the security of your node.</p>
+                </div>
+              </div>
+            )}
+            <Button onClick={handleDismissWarning} variant="primary">
+              Don't show me this again
+            </Button>
+          </div>
+        </Modal>
         <Modal display={showDeleteStore} frosted={true}>
           <div className="flex flex-col gap-3">
             {deleteError && (
@@ -257,6 +325,16 @@ function Store() {
               </div>
             </div>
           )}
+          {params.id !== '1' && isCommunityStore && (
+            <div className="bg-core-black-contrast-1 rounded p-4 text-sm font-bold">
+              Minima's Ecosystem MiniDapps have been scanned for viruses and malicious code, however Minima Global cannot guarantee that the apps in this store are bug free. Always use in READ mode unless you fully trust the developer.
+            </div>
+          )}
+          {params.id !== '1' && !isCommunityStore && (
+            <div className="bg-core-black-contrast-1 rounded p-4 text-sm font-bold">
+              Minima Global has not reviewed the apps in this Dapp Store and cannot guarantee that they are secure or bug free. Always use in READ mode unless you fully trust the developer.
+            </div>
+          )}
           {data && (
             <div className="bg-core-black-contrast-2 rounded p-4">
               <h5 className="pb-3 -mt-0.5">About</h5>
@@ -278,6 +356,7 @@ function Store() {
           <div className="flex-grow lg:px-0 flex flex-col gap-2 mb-5">
             {data &&
               data.dapps.map((app) => {
+
                 // for baz's store, the description is the name hence the conf description check,
                 // if he fixes his dapp.conf that line won't be required
                 const isInstalled = installedMiniDapps.find(
@@ -289,10 +368,10 @@ function Store() {
                 // check if repo version is higher than installed version, this will dictate if
                 // the update button should show
 
-                const updateAvailable = false;
+                let updateAvailable = false;
 
                 if (isInstalled) {
-                  compareSemver(isInstalled.conf.version, app.version);
+                  updateAvailable = compareSemver(isInstalled.conf.version, app.version);
                 }
 
                 // isLinkable, only show app link if the app has a description
@@ -302,9 +381,8 @@ function Store() {
                   <Link
                     to={`${isLinkable ? `/store/${params.id}/${app.name}` : '#'}`}
                     key={app.name}
-                    className={`bg-core-black-contrast-2 rounded flex justify-start items-left h-full ${
-                      isLinkable ? 'cursor-pointer' : 'cursor-default'
-                    }`}
+                    className={`bg-core-black-contrast-2 rounded flex justify-start items-left h-full ${isLinkable ? 'cursor-pointer' : 'cursor-default'
+                      }`}
                   >
                     <div
                       className="w-[66px] h-[64px] min-w-[64px] rounded bg-contain"

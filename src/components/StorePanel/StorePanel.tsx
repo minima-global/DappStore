@@ -16,11 +16,16 @@ function StorePanel({ repository }) {
   useEffect(() => {
     if (loaded) {
       downloadFile(repository.URL).then(function (response: any) {
-        loadBinary(response.download.file).then(function (response: any) {
-          const data = hexToBase64(response.load.data);
-          setData(data);
+          loadBinary(response.download.file).then(function (response: any) {
+            const data = hexToBase64(response.load.data);
+            setData(data);
+          }).catch(() => {
+            // do nothing if it fails
+          })
+        })
+        .catch(() => {
+          // do nothing if it fails
         });
-      });
     }
   }, [loaded, repository]);
 
