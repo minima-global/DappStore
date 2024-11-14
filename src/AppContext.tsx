@@ -2,16 +2,19 @@ import * as React from 'react';
 import { createContext, useCallback, useEffect, useRef, useState } from 'react';
 import { downloadFile, hexToBase64, isWriteMode, loadBinary, mds, sql } from './lib';
 import { escape } from 'sqlstring';
+import { VERSION } from './components/TermsOfUse';
 
 export const appContext = createContext<any>({});
 
 const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const loaded = useRef(false);
-  const [initSuccess, setInitSuccess] = useState(false);
+  const [appReady, setAppReady] = useState(false);
   const [sort, setSort] = useState('default');
   const [repositories, setRepositories] = useState([]);
   const [installedMiniDapps, setInstalledMiniDapps] = useState([]);
   const [appIsInWriteMode, setAppIsInWriteMode] = useState<boolean | null>(null);
+  const [displaySplash, setDisplaySplash] = useState<boolean | null>(false);
+  const [displayTerms, setDisplayTerms] = useState<boolean | null>(false);
 
   const getRepositories = useCallback(() => {
     sql('SELECT * FROM repositories').then((response) => {
@@ -32,9 +35,26 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 
       (window as any).MDS.init(async (evt: any) => {
         if (evt.event === 'inited') {
+          MDS.keypair.get('SPLASH', function (msg) {
+            if (!msg.value) {
+              setDisplaySplash(true);
+            } else if (msg.value === '0') {
+              setDisplaySplash(true);
+            } else {
+              MDS.keypair.get('terms_accepted', function (msg) {
+                if (!msg.value) {
+                  setDisplayTerms(true);
+                } else if (msg.value !== VERSION) {
+                  setDisplayTerms(true);
+                } else {
+                  setAppReady(true);
+                }
+              });
+            }
+          });
+
           // const dropQuery = 'DROP TABLE \`repositories\`';
           // await sql(dropQuery);
-          setInitSuccess(true);
           getRepositories();
 
           isWriteMode().then((appIsInWriteMode) => {
@@ -81,7 +101,7 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   }, [loaded, getRepositories, getMds]);
 
   const value = {
-    loaded: initSuccess,
+    loaded: appReady,
     sort,
     setSort,
     getMds,
@@ -89,6 +109,12 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     getRepositories,
     appIsInWriteMode,
     installedMiniDapps,
+    displaySplash,
+    setDisplaySplash,
+    displayTerms,
+    setDisplayTerms,
+    appReady,
+    setAppReady,
   };
 
   return <appContext.Provider value={value}>{children}</appContext.Provider>;

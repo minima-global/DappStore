@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.1.9] - 14 November 24
+
+- fixed issue where the store home screen was flashing on startup
+
+## [1.1.8] - 12 November 24
+
+- moved sql db creation to service.js
+
+## [1.1.7] - 12 November 24
+
+- debug mode disabled by default
+
+## [1.1.6] - 12 November 24
+
+- service.js app update checks are now case insensitive
+
 ## [1.1.5] - 12 November 24
 
 - Additional tweaks to the warning message about installing apps in read mode when opening the third party store for the first time

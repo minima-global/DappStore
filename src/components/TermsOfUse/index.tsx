@@ -1,43 +1,29 @@
 import Button from '../UI/Button';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import Lottie from 'lottie-react';
 import splashJson from '../../splash.json';
 import mobileSplash from '../../splash_mobile.json';
 import { appContext } from '../../AppContext';
 
-const VERSION = '1.0.0';
+export const VERSION = '1.0.0';
 
 const TermsOfUse = () => {
-  const { loaded } = useContext(appContext);
-  const [display, setDisplay] = useState(false);
+  const { displayTerms, setDisplayTerms, setAppReady } = useContext(appContext);
   const [accepted, setAccepted] = useState(false);
-
-  useEffect(() => {
-    if (loaded) {
-      MDS.keypair.get('terms_accepted', function (msg) {
-        if (!msg.value) {
-          setDisplay(true);
-        }
-
-        if (msg.value !== VERSION) {
-          setDisplay(true);
-        }
-      });
-    }
-  }, [loaded]);
 
   const handleOnClick = () => {
     setAccepted((prevState) => !prevState);
   };
 
   const handleContinue = () => {
-    setDisplay(false);
+    setDisplayTerms(false);
+    setAppReady(true);
     MDS.keypair.set('terms_accepted', VERSION);
   };
 
   return (
     <div
-      className={`fixed z-[98] top-0 left-0 bg-black w-screen h-screen flex flex-col px-8 pb-12 ${display ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      className={`fixed z-[98] top-0 left-0 bg-black w-screen h-screen flex flex-col px-8 pb-12 ${displayTerms ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
     >
       <div className="max-w-4xl mx-auto hidden lg:block">

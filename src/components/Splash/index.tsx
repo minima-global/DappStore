@@ -1,20 +1,26 @@
-import useSplash from './useSplash';
 import Button from '../UI/Button';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import Lottie from 'lottie-react';
 import splashJson from '../../splash.json';
 import mobileSplash from '../../splash_mobile.json';
+import { appContext } from '../../AppContext';
 
 const Splash = () => {
-  const { display, dismiss } = useSplash();
+  const { displaySplash, setDisplaySplash, setDisplayTerms } = useContext(appContext);
 
   useEffect(() => {
-    document.body.classList.toggle('lock', display);
-  }, [display]);
+    document.body.classList.toggle('lock', displaySplash);
+  }, [displaySplash]);
 
-  if (!display) {
+  if (!displaySplash) {
     return null;
   }
+
+  const dismiss = () => {
+    setDisplaySplash(false);
+    setDisplayTerms(true);
+    MDS.keypair.set('SPLASH', '1');
+  };
 
   return (
     <div className="fixed top-0 left-0 bg-black z-[99] w-screen h-screen flex flex-col px-8 pb-12">
