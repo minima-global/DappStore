@@ -125,7 +125,7 @@ function main() {
 
 MDS.init(function (msg) {
   if (msg.event === 'inited') {
-    MDS.sql('CREATE TABLE IF NOT EXISTS `repositories` (`id` bigint auto_increment, `name` varchar(512) NOT NULL, `url` varchar(2048) NOT NULL, `icon` varchar(2048), `created_at` TIMESTAMP)', function () {
+    MDS.sql('CREATE TABLE IF NOT EXISTS `repositories` (`id` bigint auto_increment, `name` varchar(512) NOT NULL, `url` varchar(2048) NOT NULL, `icon` varchar(2048), `created_at` TIMESTAMP)', function () {      
       MDS.cmd(`checkmode`, function (response) {
         if (response.status && response.response.mode === 'WRITE') {
           MDS.keypair.get('notifications_enabled', function (msg) {

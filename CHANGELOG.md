@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.10] - 15 November 24
+
+- added community dapps repo as a default repository
+
 ## [1.1.9] - 14 November 24
 
 - fixed issue where the store home screen was flashing on startup

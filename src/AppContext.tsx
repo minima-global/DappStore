@@ -93,6 +93,29 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
                   });
                 });
               }
+
+              const communityDapps = 'https://minidapps.minima.global/data/ecosystem-dapps.json';
+              const communityDappsCheck = `SELECT * FROM \`repositories\` WHERE \`url\` = ${escape(communityDapps)}`;
+
+              /**
+               * Check if community dapps repo is here
+               */
+              sql(communityDappsCheck).then((response) => {
+                if (response.count === 0) {
+                  downloadFile(communityDapps).then(function (response: any) {
+                    loadBinary(response.download.file).then(function (response: any) {
+                      const data = hexToBase64(response.load.data);
+                      const query = `INSERT INTO \`repositories\` (name, url, icon) VALUES (${escape(
+                        data.name
+                      )}, ${escape(communityDapps)}, ${escape(data.icon)})`;
+
+                      sql(query).then(() => {
+                        getRepositories();
+                      });
+                    });
+                  });
+                }
+              });
             });
           });
         }
