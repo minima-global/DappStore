@@ -32,14 +32,14 @@ function StorePanel({ repository }) {
   return (
     <div className="bg-core-black-contrast-2 rounded overflow-hidden flex items-stretch justify-start h-full">
       <div
-        className="w-[64px] min-w-[64px] rounded bg-cover"
+        className="w-[64px] min-w-[64px] rounded bg-cover bg-no-repeat"
         style={{
           backgroundImage: `url('${repository.ICON}'), url('./assets/app.png')`,
         }}
       />
       <div className="bg-core-black-contrast-2 grow p-3 px-4 w-full overflow-hidden">
         <h5 className="font-bold mb-0.5">{repository.NAME}</h5>
-        <p className="text-xs text-core-grey-80 text-ellipsis truncate">{data.description}</p>
+        {data.description ? <p className="text-xs text-core-grey-80 text-ellipsis truncate">{data.description}</p> : <p className="text-xs text-core-grey-80 text-ellipsis truncate">&nbsp;</p>}
       </div>
     </div>
   );

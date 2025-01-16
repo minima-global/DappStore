@@ -6,11 +6,38 @@ import { VERSION } from './components/TermsOfUse';
 
 export const appContext = createContext<any>({});
 
+const addStore = (url: string) => {
+  return new Promise<void>(async (resolve) => {
+    try {
+      const check = `SELECT * FROM \`repositories\` WHERE \`url\` = ${escape(url)}`;
+
+      /**
+       * Check if community dapps repo is here
+       */
+      const response = await sql(check);
+
+      if (response.count === 0) {
+        const downloadedFile = await downloadFile(url);
+        const loadedFile: any = await loadBinary(downloadedFile.download.file);
+        const data = hexToBase64(loadedFile.load.data);
+        const query = `INSERT INTO \`repositories\` (name, url, icon) VALUES (${escape(data.name)}, ${escape(url)}, ${escape(data.icon)})`;
+
+        await sql(query);
+        resolve();
+      }
+
+      resolve();
+    } catch (error) {
+      resolve();
+    }
+  });
+};
+
 const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const loaded = useRef(false);
   const [appReady, setAppReady] = useState(false);
   const [sort, setSort] = useState('default');
-  const [repositories, setRepositories] = useState([]);
+  const [repositories, setRepositories] = useState<any[]>([]);
   const [installedMiniDapps, setInstalledMiniDapps] = useState([]);
   const [appIsInWriteMode, setAppIsInWriteMode] = useState<boolean | null>(null);
   const [displaySplash, setDisplaySplash] = useState<boolean | null>(false);
@@ -18,7 +45,36 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 
   const getRepositories = useCallback(() => {
     sql('SELECT * FROM repositories').then((response) => {
-      setRepositories(response.rows);
+      /*
+       * Reorder repositories so that the main stores are listed at the top from
+       * https://minidapps.minima.global/data/dapps.json
+       * https://minidapps.minima.global/data/ecosystem-dapps.json
+       * https://minidapps.minima.global/data/beta-test-dapps.json
+       * and the rest of the stores are listed at the bottom
+       */
+      const reorderedRepositories: any[] = [];
+      const hasMainStore = response.rows.find((repo) => repo.URL === 'https://minidapps.minima.global/data/dapps.json');
+      const hasEcosystemStore = response.rows.find((repo) => repo.URL === 'https://minidapps.minima.global/data/ecosystem-dapps.json');
+      const hasBetaTestStore = response.rows.find((repo) => repo.URL === 'https://minidapps.minima.global/data/beta-test-dapps.json');
+      const restOfStores = response.rows.filter((repo) => ![
+        'https://minidapps.minima.global/data/dapps.json',
+        'https://minidapps.minima.global/data/ecosystem-dapps.json',
+        'https://minidapps.minima.global/data/beta-test-dapps.json'
+      ].includes(repo.URL));
+
+      if (hasMainStore) {
+        reorderedRepositories.push(hasMainStore);
+      }
+      if (hasEcosystemStore) {
+        reorderedRepositories.push(hasEcosystemStore);
+      }
+      if (hasBetaTestStore) {
+        reorderedRepositories.push(hasBetaTestStore);
+      }
+
+      reorderedRepositories.push(...restOfStores);
+
+      setRepositories(reorderedRepositories);
     });
   }, []);
 
@@ -71,52 +127,12 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
           /**
            * Create repositories db table if it does not exist
            */
-          sql(dbQuery).then(() => {
-            const url = 'https://minidapps.minima.global/data/dapps.json';
-            const check = `SELECT * FROM \`repositories\` WHERE \`url\` = ${escape(url)}`;
+          sql(dbQuery).then(async() => {
 
-            /**
-             * Check if official repo is here
-             */
-            sql(check).then((response) => {
-              if (response.count === 0) {
-                downloadFile(url).then(function (response: any) {
-                  loadBinary(response.download.file).then(function (response: any) {
-                    const data = hexToBase64(response.load.data);
-                    const query = `INSERT INTO \`repositories\` (name, url, icon) VALUES (${escape(
-                      data.name
-                    )}, ${escape(url)}, ${escape(data.icon)})`;
-
-                    sql(query).then(() => {
-                      getRepositories();
-                    });
-                  });
-                });
-              }
-
-              const communityDapps = 'https://minidapps.minima.global/data/ecosystem-dapps.json';
-              const communityDappsCheck = `SELECT * FROM \`repositories\` WHERE \`url\` = ${escape(communityDapps)}`;
-
-              /**
-               * Check if community dapps repo is here
-               */
-              sql(communityDappsCheck).then((response) => {
-                if (response.count === 0) {
-                  downloadFile(communityDapps).then(function (response: any) {
-                    loadBinary(response.download.file).then(function (response: any) {
-                      const data = hexToBase64(response.load.data);
-                      const query = `INSERT INTO \`repositories\` (name, url, icon) VALUES (${escape(
-                        data.name
-                      )}, ${escape(communityDapps)}, ${escape(data.icon)})`;
-
-                      sql(query).then(() => {
-                        getRepositories();
-                      });
-                    });
-                  });
-                }
-              });
-            });
+            await addStore('https://minidapps.minima.global/data/dapps.json');
+            await addStore('https://minidapps.minima.global/data/ecosystem-dapps.json');
+            await addStore('https://minidapps.minima.global/data/beta-test-dapps.json');
+            getRepositories();
           });
         }
       });

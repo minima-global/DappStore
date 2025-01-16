@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.11] - 16 January 25
+
+- fixed an issue where the add a store button was visible when there was already MiniDapp stores
+
 ## [1.1.10] - 15 November 24
 
 - added community dapps repo as a default repository

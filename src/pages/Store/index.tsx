@@ -24,6 +24,7 @@ function Store() {
   const [errorResponseModal, setErrorResponseModal] = useState<string | false>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [isCommunityStore, setIsCommunityStore] = useState<boolean>(false);
+  const [isBetaTestStore, setIsBetaTestStore] = useState<boolean>(false);
 
   useEffect(() => {
     if (copied) {
@@ -39,12 +40,11 @@ function Store() {
 
   useEffect(() => {
     if (repository && !data && loaded) {
-      if (params.id !== '1' && repository.URL.includes('https://minidapps.minima.global/data/community-dapps-test.json')) {
-        setIsCommunityStore(true);
-      }
-
       if (params.id !== '1' && repository.URL.includes('https://minidapps.minima.global/data/ecosystem-dapps.json')) {
         setIsCommunityStore(true);
+      }
+      if (params.id !== '1' && repository.URL.includes('https://minidapps.minima.global/data/beta-test-dapps.json')) {
+        setIsBetaTestStore(true);
       }
 
       downloadFile(repository.URL).then(function (response: any) {
@@ -329,34 +329,27 @@ function Store() {
               </div>
             </div>
           )}
-          {params.id !== '1' && isCommunityStore && (
+          {params.id !== '1' && isCommunityStore && !isBetaTestStore && (
             <div className="bg-core-black-contrast-1 rounded p-4 text-sm font-bold">
               Minima's Ecosystem MiniDapps have been scanned for viruses and malicious code, however Minima Global cannot guarantee that the apps in this store are bug free. Always use MiniDapps in READ mode unless you fully trust the developer.
             </div>
           )}
-          {params.id !== '1' && !isCommunityStore && (
+          {params.id !== '1' && !isCommunityStore && !isBetaTestStore && (
             <div className="bg-core-black-contrast-1 rounded p-4 text-sm font-bold">
               Minima Global has not reviewed the apps in this Dapp Store and cannot guarantee that they are secure or bug free. Always use MiniDapps in READ mode unless you fully trust the developer.
+            </div>
+          )}
+          {params.id !== '1' && isBetaTestStore && (
+            <div className="bg-core-black-contrast-1 rounded p-4 text-sm font-bold">
+              These MiniDapps are in Beta testing. They have been scanned for viruses and malicious code, however Minima Global cannot guarantee that the apps in this store are bug free. Always use MiniDapps in READ mode unless you fully trust the developer.
             </div>
           )}
           {data && (
             <div className="bg-core-black-contrast-2 rounded p-4">
               <h5 className="pb-3 -mt-0.5">About</h5>
               <p className="text-sm text-core-grey-20">{data.description}</p>
-              {/*<p className="text-xs">Read more</p>*/}
             </div>
           )}
-
-          {/*<div className="cursor-pointer text-right text-primary flex gap-3 items-center justify-end">*/}
-          {/*  Install all*/}
-          {/*  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">*/}
-          {/*    <path*/}
-          {/*      d="M2.3077 15.9997C1.80257 15.9997 1.375 15.8247 1.025 15.4747C0.675 15.1247 0.5 14.6971 0.5 14.192V11.4997H1.99997V14.192C1.99997 14.2689 2.03202 14.3394 2.09612 14.4036C2.16024 14.4677 2.23077 14.4997 2.3077 14.4997H13.6922C13.7692 14.4997 13.8397 14.4677 13.9038 14.4036C13.9679 14.3394 14 14.2689 14 14.192V11.4997H15.5V14.192C15.5 14.6971 15.325 15.1247 14.975 15.4747C14.625 15.8247 14.1974 15.9997 13.6922 15.9997H2.3077ZM7.99997 12.1151L3.7308 7.84588L4.78462 6.76131L7.25 9.22668V0.82666H8.74995V9.22668L11.2153 6.76131L12.2691 7.84588L7.99997 12.1151Z"*/}
-          {/*      fill="#31CEFF"*/}
-          {/*    />*/}
-          {/*  </svg>*/}
-          {/*</div>*/}
-
           <div className="flex-grow lg:px-0 flex flex-col gap-2 mb-5">
             {data &&
               data.dapps.map((app) => {
@@ -389,7 +382,7 @@ function Store() {
                       }`}
                   >
                     <div
-                      className="w-[66px] h-[64px] min-w-[64px] rounded bg-contain"
+                      className="w-[66px] h-[64px] min-w-[64px] rounded bg-contain bg-no-repeat"
                       style={{
                         backgroundImage: `url('${app.icon}')`,
                       }}

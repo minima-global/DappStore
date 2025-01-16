@@ -28,7 +28,7 @@ function Home() {
     dappLink !== '' &&
     !/^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/.test(dappLink) &&
     !dappLink.includes('.json');
-  const hasMoreThanOneStore = loaded.current && repositories.length > 1;
+  const hasMoreThanOneStore = loaded && repositories.length > 0;
 
   const addDappStore = () => {
     setError(null);
