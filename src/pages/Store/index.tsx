@@ -187,7 +187,24 @@ function Store() {
                 </div>
               </div>
             )}
-            {!isCommunityStore && (
+            {isBetaTestStore && (
+              <div>
+                <h1 className="text-lg font-bold mb-4">Attention: Minidapp Permissions</h1>
+                <div className="text-sm mb-4 flex flex-col gap-2">
+                  <p className="font-bold">
+                    The MiniDapps in this store are in Beta testing. They have been scanned for viruses and malicious code, however Minima Global cannot guarantee that the apps in this store are bug free.
+                  </p>
+                  <p>
+                    For security, all MiniDapps are installed with READ ONLY access to your wallet, and will require your approval for any transaction it attempts to make.
+                  </p>
+                  <p>
+                    <span className="font-bold">If a MiniDapp requests WRITE access - you should only grant this if you fully trust the developer.</span> Granting WRITE permissions allows the MiniDapp to interact directly with your wallet, which could affect your funds.
+                  </p>
+                  <p className="font-bold">You are responsible for the security of your node.</p>
+                </div>
+              </div>
+            )}
+            {!isCommunityStore && !isBetaTestStore && (
               <div>
                 <h1 className="text-lg font-bold mb-4">Attention: Minidapp Permissions</h1>
                 <div className="text-sm mb-4 flex flex-col gap-2">
@@ -329,19 +346,19 @@ function Store() {
               </div>
             </div>
           )}
-          {params.id !== '1' && isCommunityStore && !isBetaTestStore && (
+          {params.id !== '1' && isCommunityStore && (
             <div className="bg-core-black-contrast-1 rounded p-4 text-sm font-bold">
               Minima's Ecosystem MiniDapps have been scanned for viruses and malicious code, however Minima Global cannot guarantee that the apps in this store are bug free. Always use MiniDapps in READ mode unless you fully trust the developer.
-            </div>
-          )}
-          {params.id !== '1' && !isCommunityStore && !isBetaTestStore && (
-            <div className="bg-core-black-contrast-1 rounded p-4 text-sm font-bold">
-              Minima Global has not reviewed the apps in this Dapp Store and cannot guarantee that they are secure or bug free. Always use MiniDapps in READ mode unless you fully trust the developer.
             </div>
           )}
           {params.id !== '1' && isBetaTestStore && (
             <div className="bg-core-black-contrast-1 rounded p-4 text-sm font-bold">
               These MiniDapps are in Beta testing. They have been scanned for viruses and malicious code, however Minima Global cannot guarantee that the apps in this store are bug free. Always use MiniDapps in READ mode unless you fully trust the developer.
+            </div>
+          )}
+          {params.id !== '1' && !isCommunityStore && !isBetaTestStore && (
+            <div className="bg-core-black-contrast-1 rounded p-4 text-sm font-bold">
+              Minima Global has not reviewed the apps in this Dapp Store and cannot guarantee that they are secure or bug free. Always use MiniDapps in READ mode unless you fully trust the developer.
             </div>
           )}
           {data && (

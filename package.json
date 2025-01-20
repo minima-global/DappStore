@@ -2,7 +2,7 @@
   "name": "dapp_store",
   "private": true,
   "description": "Minidapp store to download all your favourite apps!",
-  "version": "1.1.11",
+  "version": "1.2.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,7 +12,7 @@
     "package": "bash ./create-minima-app/package.sh",
     "postbuild": "node ./create-minima-app/postbuild.js",
     "copysrc": "bash ./create-minima-app/copySrcToBuild.sh",
-    "zip": "node --no-warnings --insecure-http-parser --http-parser=legacy ./create-minima-app/scripts.js zip",
+    "zip": "npm run build && node --no-warnings --insecure-http-parser --http-parser=legacy ./create-minima-app/scripts.js zip",
     "minima:install": "node --no-warnings --insecure-http-parser --http-parser=legacy ./create-minima-app/scripts.js install",
     "minima:update": "npm run zip && node --no-warnings --insecure-http-parser --http-parser=legacy ./create-minima-app/scripts.js update",
     "minima:uninstall": "node --no-warnings --insecure-http-parser --http-parser=legacy ./create-minima-app/scripts.js uninstall",

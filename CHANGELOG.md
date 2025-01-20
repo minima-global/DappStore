@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1] - 20 January 25
+
+- JSON parsing is now wrapped in a try/catch to prevent errors from breaking the app
+
+## [1.2.0] - 17 January 25
+
+- Added a new default store for beta test dapps
+
 ## [1.1.11] - 16 January 25
 
 - fixed an issue where the add a store button was visible when there was already MiniDapp stores

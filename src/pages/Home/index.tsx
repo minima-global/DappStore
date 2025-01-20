@@ -331,7 +331,7 @@ function Home() {
           ))}
           {!hasMoreThanOneStore && (
             <div className="text-center mt-16">
-              <div className="text-lg mb-6">You haven’t added a store yet</div>
+              <div className="text-lg mb-6">You haven't added a store yet</div>
               <button
                 onClick={() => setDisplayAddStore(true)}
                 className="border border-white h-[48px] max-w-[172px] w-full rounded"

@@ -79,41 +79,45 @@ function main() {
         getUrls(function (jsonUrls) {
           for (var repo of jsonUrls) {
             MDS.net.GET(repo, function (resp) {
-              // ensure json is a minidapp repo
-              if (resp && resp.response) {
-                var json = JSON.parse(resp.response);
-                var hasUpdates = 0;
+              try {
+                // ensure json is a minidapp repo
+                if (resp && resp.response) {
+                  var json = JSON.parse(resp.response);
+                  var hasUpdates = 0;
 
-                for (var minidapp of json.dapps) {
-                  try {
-                    var name = minidapp.name;
-                    var version = minidapp.version;
-                    var installed = installedApps.find((i) => i.conf.name.toLowerCase() === name.toLowerCase());
+                  for (var minidapp of json.dapps) {
+                    try {
+                      var name = minidapp.name;
+                      var version = minidapp.version;
+                      var installed = installedApps.find((i) => i.conf.name.toLowerCase() === name.toLowerCase());
 
-                    if (installed) {
-                      var result = compareSemver(installed.conf.version, version);
+                      if (installed) {
+                        var result = compareSemver(installed.conf.version, version);
 
-                      if (result) {
-                        hasUpdates += 1;
+                        if (result) {
+                          hasUpdates += 1;
+                        }
                       }
+                    } catch (err) {
+                      // do nothing if it fails
                     }
-                  } catch (err) {
-                    // do nothing if it fails
-                  }
-                }
-
-                if (hasUpdates) {
-                  if (DEBUG) {
-                    MDS.log('> updates available');
                   }
 
-                  MDS.notify('New MiniDapps are available! Tap to open the Dapp Store.');
-                  sent = true;
-                }
+                  if (hasUpdates) {
+                    if (DEBUG) {
+                      MDS.log('> updates available');
+                    }
 
-                if (!hasUpdates && DEBUG) {
-                  MDS.log('All MiniDapps are up to date!');
+                    MDS.notify('New MiniDapps are available! Tap to open the Dapp Store.');
+                    sent = true;
+                  }
+
+                  if (!hasUpdates && DEBUG) {
+                    MDS.log('All MiniDapps are up to date!');
+                  }
                 }
+              } catch {
+                // do nothing if it fails
               }
             });
           }
@@ -125,17 +129,17 @@ function main() {
 
 MDS.init(function (msg) {
   if (msg.event === 'inited') {
-    MDS.sql('CREATE TABLE IF NOT EXISTS `repositories` (`id` bigint auto_increment, `name` varchar(512) NOT NULL, `url` varchar(2048) NOT NULL, `icon` varchar(2048), `created_at` TIMESTAMP)', function () {      
+    MDS.sql('CREATE TABLE IF NOT EXISTS `repositories` (`id` bigint auto_increment, `name` varchar(512) NOT NULL, `url` varchar(2048) NOT NULL, `icon` varchar(2048), `created_at` TIMESTAMP)', function () {
       MDS.cmd(`checkmode`, function (response) {
         if (response.status && response.response.mode === 'WRITE') {
           MDS.keypair.get('notifications_enabled', function (msg) {
             if (!msg.value) {
               // by default enable notifications
               MDS.keypair.set('notifications_enabled', '1');
-      
+
               main();
             }
-      
+
             if (msg.value === '1') {
               main();
             }
