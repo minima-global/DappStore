@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.2] - 20 January 25
+
+- Invalid syntax in service.js
+
 ## [1.2.1] - 20 January 25
 
 - JSON parsing is now wrapped in a try/catch to prevent errors from breaking the app

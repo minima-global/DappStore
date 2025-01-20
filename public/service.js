@@ -116,7 +116,7 @@ function main() {
                     MDS.log('All MiniDapps are up to date!');
                   }
                 }
-              } catch {
+              } catch (err) {
                 // do nothing if it fails
               }
             });
