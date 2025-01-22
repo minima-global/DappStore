@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.3] - 20 January 25
+
+- Log error if an error occurs when fetching the repo in service.js
+
 ## [1.2.2] - 20 January 25
 
 - Invalid syntax in service.js
