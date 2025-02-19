@@ -77,7 +77,7 @@ function main() {
 
       getInstalledApps(function (installedApps) {
         getUrls(function (jsonUrls) {
-          const updatesOnStore = [];
+          const updatesAvailable = [];
 
           for (var repo of jsonUrls) {
             MDS.net.GET(repo, function (resp) {
@@ -98,6 +98,7 @@ function main() {
 
                         if (result) {
                           hasUpdates += 1;
+                          updatesAvailable.push(name);
                         }
                       }
                     } catch (err) {
@@ -109,11 +110,6 @@ function main() {
                     if (DEBUG) {
                       MDS.log('> updates available');
                     }
-
-                    updatesOnStore.push({
-                      name: json.name,
-                      hasUpdates: hasUpdates,
-                    });
                   }
 
                   if (!hasUpdates && DEBUG) {
@@ -126,12 +122,16 @@ function main() {
             });
           }
 
-          if (updatesOnStore.length > 0) {
-            const storeSummaries = updatesOnStore.map((store) => {
-              return `${store.name}: (${store.hasUpdates})`;
-            });
+          if (updatesAvailable.length > 0) {
+            var uniqueMiniDapps = [];
 
-            MDS.notify(`New MiniDapps are available! Tap to open the Dapp Store. ${storeSummaries.join(', ')}`);
+            for (var update of updatesAvailable) {
+              if (!uniqueMiniDapps.includes(update)) {
+                uniqueMiniDapps.push(update);
+              }
+            }
+
+            MDS.notify(`New MiniDapps are available! ${uniqueMiniDapps.join(', ')}`);
             sent = true;
           }
         });

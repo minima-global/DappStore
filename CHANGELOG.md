@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.3.1] - 19 February 25
+
+- Add the names of the MiniDapps that have updates available to the notification message
+
 ## [1.3.0] - 13 February 25
 
 - The notification now includes the number of updates available for each store
