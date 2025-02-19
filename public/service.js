@@ -77,6 +77,8 @@ function main() {
 
       getInstalledApps(function (installedApps) {
         getUrls(function (jsonUrls) {
+          const updatesOnStore = [];
+
           for (var repo of jsonUrls) {
             MDS.net.GET(repo, function (resp) {
               try {
@@ -108,8 +110,10 @@ function main() {
                       MDS.log('> updates available');
                     }
 
-                    MDS.notify('New MiniDapps are available! Tap to open the Dapp Store.');
-                    sent = true;
+                    updatesOnStore.push({
+                      name: json.name,
+                      hasUpdates: hasUpdates,
+                    });
                   }
 
                   if (!hasUpdates && DEBUG) {
@@ -120,6 +124,15 @@ function main() {
                 MDS.log('There was an error fetching the repo: ' + repo);
               }
             });
+          }
+
+          if (updatesOnStore.length > 0) {
+            const storeSummaries = updatesOnStore.map((store) => {
+              return `${store.name}: (${store.hasUpdates})`;
+            });
+
+            MDS.notify(`New MiniDapps are available! Tap to open the Dapp Store. ${storeSummaries.join(', ')}`);
+            sent = true;
           }
         });
       });

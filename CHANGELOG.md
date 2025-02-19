@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.3.0] - 13 February 25
+
+- The notification now includes the number of updates available for each store
+
 ## [1.2.3] - 20 January 25
 
 - Log error if an error occurs when fetching the repo in service.js

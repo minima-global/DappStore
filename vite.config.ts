@@ -4,6 +4,7 @@ import { createHtmlPlugin } from 'vite-plugin-html';
 import packageJson from './package.json';
 import capitalize from "lodash/capitalize";
 import legacy from '@vitejs/plugin-legacy'
+import { copyFileSync } from 'fs';
 
 export default ({ mode }) => {
   let devEnv = '';
@@ -38,6 +39,16 @@ export default ({ mode }) => {
           },
         },
       }),
+      {
+        name: 'copy-changelog',
+        closeBundle() {
+          try {
+            copyFileSync('CHANGELOG.md', 'build/CHANGELOG.md');
+          } catch (error) {
+            console.warn('Could not copy CHANGELOG.md, please check that it exists in the root directory');
+          }
+        }
+      }
     ],
   });
 }
