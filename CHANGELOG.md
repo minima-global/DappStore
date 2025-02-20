@@ -2,7 +2,7 @@
 
 ## [1.4.0] - 20 February 25
 
-- Added the ability to install a bundle of MiniDapps
+- Added the ability to install a bundle of MiniDapps if a MiniDapp requires additional MiniDapps as dependencies
 
 ## [1.3.1] - 19 February 25
 
