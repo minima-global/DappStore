@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.4.0] - 20 February 25
+
+- Added the ability to install a bundle of MiniDapps
+
 ## [1.3.1] - 19 February 25
 
 - Add the names of the MiniDapps that have updates available to the notification message

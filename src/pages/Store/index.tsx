@@ -25,6 +25,7 @@ function Store() {
   const [copied, setCopied] = useState<boolean>(false);
   const [isCommunityStore, setIsCommunityStore] = useState<boolean>(false);
   const [isBetaTestStore, setIsBetaTestStore] = useState<boolean>(false);
+  const [showMissingDependencies, setShowMissingDependencies] = useState<{ display: boolean, dapp: any }>({ display: false, dapp: null });
 
   useEffect(() => {
     if (copied) {
@@ -95,21 +96,22 @@ function Store() {
   };
 
   const installApp = async (dapp: any) => {
-    try {
-      setSpinners((prevState) => ({
-        ...prevState,
-        [dapp.name]: true,
-      }));
-      await downloadAndInstallMDSFile(dapp.file.replace('http://', 'https://'));
-      await getMds();
-    } catch {
-      setErrorResponseModal('Unable to install MiniDapp, please try again later...');
-    } finally {
-      setSpinners((prevState) => ({
-        ...prevState,
-        [dapp.name]: false,
-      }));
+    if (dapp.dependencies) {
+      const missingDependencies: string[] = [];
+
+      dapp.dependencies.forEach(async (miniDappName: string) => {
+        if (!installedMiniDapps.find((i: any) => i.conf.name === miniDappName)) {
+          missingDependencies.push(miniDappName);
+        }
+      });
+
+      if (missingDependencies.length > 0) {
+        setShowMissingDependencies({ display: true, dapp: dapp });
+        return;
+      }
     }
+
+    installSingleApp(dapp);
   };
 
   const updateApp = async (dapp: any, uid: string) => {
@@ -159,6 +161,55 @@ function Store() {
     MDS.keypair.set('store_warning_' + params.id, '1');
   };
 
+  const handleDismissMissingDependencies = () => {
+    setShowMissingDependencies({ display: false, dapp: null });
+  };
+
+  const installSingleApp = async (dapp: any) => {
+    try {
+      setSpinners((prevState) => ({
+        ...prevState,
+        [dapp.name]: true,
+      }));
+
+      await downloadAndInstallMDSFile(dapp.file.replace('http://', 'https://'));
+      await getMds();
+      setShowMissingDependencies({ display: false, dapp: null });
+    } catch {
+      setErrorResponseModal('Unable to install MiniDapp, please try again later...');
+    } finally {
+      setSpinners((prevState) => ({
+        ...prevState,
+        [dapp.name]: false,
+      }));
+    }
+  };
+
+  const installBundle = async (dapp: any) => {
+    try {
+      setSpinners((prevState) => ({
+        ...prevState,
+        [dapp.name + `-bundle`]: true,
+      }));
+
+      for (const miniDapp of dapp.dependencies) {
+        const foundMiniDapp = data.dapps.find((i: any) => i.name === miniDapp);
+        await downloadAndInstallMDSFile(foundMiniDapp.file.replace('http://', 'https://'));
+      }
+
+      await downloadAndInstallMDSFile(dapp.file.replace('http://', 'https://'));
+      await getMds();
+      setShowMissingDependencies({ display: false, dapp: null });
+    } catch {
+      setErrorResponseModal('Unable to install MiniDapp, please try again later...');
+    } finally {
+      setSpinners((prevState) => ({
+        ...prevState,
+        [dapp.name + `-bundle`]: false,
+      }));
+    }
+  };
+
   return (
     <div className="relative app text-white overflow-hidden inline-grid">
       <div className="overflow-hidden">
@@ -167,13 +218,46 @@ function Store() {
             Copied to clipboard
           </div>
         </div>
+        <Modal display={showMissingDependencies.display} frosted={true}>
+          <div className="flex flex-col gap-3 text-center">
+            {showMissingDependencies.dapp && (
+              <div className="flex flex-col gap-6">
+                <h5><strong>{showMissingDependencies.dapp.name}</strong> is part of a bundle and requires <strong>{showMissingDependencies.dapp.dependencies.join(',')}</strong> to function as expected. Please select how to proceed.</h5>
+                <div className="flex flex-col gap-2">
+                  <Button
+                    variant="primary"
+                    loading={spinners[showMissingDependencies.dapp.name]}
+                    disabled={spinners[showMissingDependencies.dapp.name + `-bundle`]}
+                    onClick={() => installSingleApp(showMissingDependencies.dapp)}
+                  >
+                    Install MiniFS
+                  </Button>
+                  <Button
+                    variant="primary"
+                    loading={spinners[showMissingDependencies.dapp.name + `-bundle`]}
+                    disabled={spinners[showMissingDependencies.dapp.name]}
+                    onClick={() => installBundle(showMissingDependencies.dapp)}
+                  >
+                    Install the bundle
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={handleDismissMissingDependencies}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </Modal>
         <Modal display={showWarning} frosted={true}>
           <div className="flex flex-col gap-3 text-center">
             {isCommunityStore && (
               <div>
                 <h1 className="text-lg font-bold mb-4">Attention: Minidapp Permissions</h1>
                 <div className="text-sm mb-4 flex flex-col gap-2">
-                  
+
                   <p className="font-bold">
                     Minima's Ecosystem MiniDapps have been scanned for viruses and malicious code, however Minima Global cannot guarantee that the apps in this store are bug free.
                   </p>
@@ -208,7 +292,7 @@ function Store() {
               <div>
                 <h1 className="text-lg font-bold mb-4">Attention: Minidapp Permissions</h1>
                 <div className="text-sm mb-4 flex flex-col gap-2">
-                  
+
                   <p className="font-bold">
                     Minima Global has not reviewed the apps in this Dapp store and cannot guarantee that they are secure or bug free.
                   </p>
