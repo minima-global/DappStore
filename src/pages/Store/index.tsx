@@ -230,7 +230,7 @@ function Store() {
                     disabled={spinners[showMissingDependencies.dapp.name + `-bundle`]}
                     onClick={() => installSingleApp(showMissingDependencies.dapp)}
                   >
-                    Install MiniFS
+                    Install {showMissingDependencies.dapp.name}
                   </Button>
                   <Button
                     variant="primary"
