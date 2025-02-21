@@ -228,7 +228,7 @@ function Home() {
         </TitleBar>
         <div className="relative pt-2 p-4 flex flex-col gap-4 max-w-xl mx-auto h-full">
           <Link to="/store/1" className="w-full">
-            <img alt="Banner" src="./assets/banner.svg" className="w-full" />
+            <img alt="Banner" src="./assets/banner.jpg" className="w-full" />
           </Link>
           <h1 className="text-lg">My stores</h1>
           <div className="grid grid-cols-12">

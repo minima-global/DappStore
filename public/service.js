@@ -4,6 +4,7 @@ var DEBUG = false;
 // Ticker for timer execution
 var ticker = 0;
 var sent = false;
+var previouslyNotified = {};
 
 function getInstalledApps(callback) {
   MDS.cmd(`mds`, function (resp) {
@@ -70,73 +71,93 @@ function main() {
       MDS.log('> inside!');
     }
 
-    if (msg.value === '1') {
-      if (DEBUG) {
-        MDS.log('> enabled!');
-      }
+    MDS.keypair.get('previously_notified', function (previouslyNotifiedMsg) {
+      try {
+        if (previouslyNotifiedMsg.value) {
+          previouslyNotified = JSON.parse(previouslyNotifiedMsg.value);
+        }
 
-      getInstalledApps(function (installedApps) {
-        getUrls(function (jsonUrls) {
-          const updatesAvailable = [];
-
-          for (var repo of jsonUrls) {
-            MDS.net.GET(repo, function (resp) {
-              try {
-                // ensure json is a minidapp repo
-                if (resp && resp.response) {
-                  var json = JSON.parse(resp.response);
-                  var hasUpdates = 0;
-
-                  for (var minidapp of json.dapps) {
-                    try {
-                      var name = minidapp.name;
-                      var version = minidapp.version;
-                      var installed = installedApps.find((i) => i.conf.name.toLowerCase() === name.toLowerCase());
-
-                      if (installed) {
-                        var result = compareSemver(installed.conf.version, version);
-
-                        if (result) {
-                          hasUpdates += 1;
-                          updatesAvailable.push(name);
+        if (msg.value === '1') {
+          if (DEBUG) {
+            MDS.log('> enabled!');
+          }
+    
+          getInstalledApps(function (installedApps) {
+            getUrls(function (jsonUrls) {
+              const updatesAvailable = [];
+              const installsAvailable = [];
+    
+              for (var repo of jsonUrls) {
+                MDS.net.GET(repo, function (resp) {
+                  try {
+                    // ensure json is a minidapp repo
+                    if (resp && resp.response) {
+                      var json = JSON.parse(resp.response);
+    
+                      for (var minidapp of json.dapps) {
+                        try {
+                          var name = minidapp.name;
+                          var version = minidapp.version;
+                          var installed = installedApps.find((i) => i.conf.name.toLowerCase() === name.toLowerCase());
+    
+                          if (installed) {
+                            var result = compareSemver(installed.conf.version, version);
+    
+                            if (result) {
+                              updatesAvailable.push({ name: name, version: version });
+                            }
+                          } else {
+                            installsAvailable.push({ name: name, version: version });
+                          }
+                        } catch (err) {
+                          // do nothing if it fails
                         }
                       }
-                    } catch (err) {
-                      // do nothing if it fails
                     }
+                  } catch (err) {
+                    MDS.log('There was an error fetching the repo: ' + repo);
                   }
+                });
+              }
+    
+              let notifyUserOnApps = [];
 
-                  if (hasUpdates) {
-                    if (DEBUG) {
-                      MDS.log('> updates available');
-                    }
-                  }
-
-                  if (!hasUpdates && DEBUG) {
-                    MDS.log('All MiniDapps are up to date!');
+              // ensure updates avaible are unique,so duplicates are not notified
+              if (updatesAvailable.length > 0) {    
+                for (var update of updatesAvailable) {
+                  if (!previouslyNotified[update.name] || compareSemver(previouslyNotified[update.name], update.version)) {
+                    previouslyNotified[update.name] = update.version;
+                    notifyUserOnApps.push(update);
                   }
                 }
-              } catch (err) {
-                MDS.log('There was an error fetching the repo: ' + repo);
+              }
+    
+              // we want to keep updates separate from installs to make things easier to change
+              // ensure installs available are unique, so duplicates are not notified
+              if (installsAvailable.length > 0) {
+                for (var install of installsAvailable) {
+                  if (!previouslyNotified[install.name] || compareSemver(previouslyNotified[install.name], install.version)) {
+                    previouslyNotified[install.name] = install.version;
+                    notifyUserOnApps.push(install);
+                  }
+                }
+              }
+    
+              if (notifyUserOnApps.length > 0) {
+                const names = notifyUserOnApps.map((app) => app.name).join(', ');
+
+                MDS.notify(`New MiniDapps are available! ${names}`);
+                sent = true;
+
+                MDS.keypair.set('previously_notified', JSON.stringify(previouslyNotified));
               }
             });
-          }
-
-          if (updatesAvailable.length > 0) {
-            var uniqueMiniDapps = [];
-
-            for (var update of updatesAvailable) {
-              if (!uniqueMiniDapps.includes(update)) {
-                uniqueMiniDapps.push(update);
-              }
-            }
-
-            MDS.notify(`New MiniDapps are available! ${uniqueMiniDapps.join(', ')}`);
-            sent = true;
-          }
-        });
-      });
-    }
+          });
+        }
+      } catch (err) {
+        // do nothing
+      }
+    });
   });
 }
 
