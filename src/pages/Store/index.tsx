@@ -210,6 +210,22 @@ function Store() {
     }
   };
 
+  const renderDependencyNames = () => {
+    if (!showMissingDependencies.dapp) {
+      return '';
+    }
+
+    const dependencies = showMissingDependencies.dapp.dependencies.length;
+
+    if (dependencies === 1) {
+      return showMissingDependencies.dapp.dependencies[0];
+    } else if (dependencies === 2) {
+      return showMissingDependencies.dapp.dependencies.join(' and ');
+    } else {
+      return showMissingDependencies.dapp.dependencies.slice(0, -1).join(', ') + ' and ' + showMissingDependencies.dapp.dependencies[showMissingDependencies.dapp.dependencies.length - 1];
+    }
+  };
+
   return (
     <div className="relative app text-white overflow-hidden inline-grid">
       <div className="overflow-hidden">
@@ -222,7 +238,7 @@ function Store() {
           <div className="flex flex-col gap-3 text-center">
             {showMissingDependencies.dapp && (
               <div className="flex flex-col gap-6">
-                <h5><strong>{showMissingDependencies.dapp.name}</strong> is part of a bundle and requires <strong>{showMissingDependencies.dapp.dependencies.join(',')}</strong> to function as expected. Please select how to proceed.</h5>
+                <h5><strong>{showMissingDependencies.dapp.name}</strong> is part of a bundle and requires <strong>{renderDependencyNames()}</strong> to function as expected. Please select how to proceed.</h5>
                 <div className="flex flex-col gap-2">
                   <Button
                     variant="primary"

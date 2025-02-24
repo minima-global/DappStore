@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.4.2] - 24 February 25
+
+- Minor text update to the warning message about installing a bundle of MiniDapps
+
 ## [1.4.1] - 21 February 25
 
 - Notifications for available and updatable MiniDapps are now only sent once per version (and must be higher than the previously notified version)
