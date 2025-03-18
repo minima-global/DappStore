@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.5.1] - 18 March 25
+
+- The Minima MiniDapp banner is now hidden if the Minima MiniDapp store is not reachable
+
 ## [1.5.0] - 18 March 25
 
 - The default Minima MiniDapp stores are no longer automatically added

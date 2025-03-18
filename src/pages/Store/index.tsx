@@ -354,7 +354,7 @@ function Store() {
           </div>
         </Modal>
         <TitleBarBack label="Back">
-          {params.id !== '1' && !IS_MINIMA_BROWSER && (
+          {!IS_MINIMA_BROWSER && (
             <div
               onClick={copyStoreLink}
               className="cursor-pointer active:scale-90 absolute right-0 relative w-[36px] h-[36px] rounded-full bg-core-black-contrast-2 flex items-center justify-center"
@@ -374,7 +374,7 @@ function Store() {
               </svg>
             </div>
           )}
-          {params.id !== '1' && IS_MINIMA_BROWSER && (
+          {IS_MINIMA_BROWSER && (
             <div
               onClick={shareStore}
               className="cursor-pointer active:scale-90 absolute right-0 relative w-[36px] h-[36px] rounded-full bg-core-black-contrast-2 flex items-center justify-center"

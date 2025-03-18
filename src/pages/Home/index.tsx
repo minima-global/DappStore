@@ -122,11 +122,11 @@ function Home() {
       if (query !== '') {
         results = results.filter((a) => a.NAME.toLowerCase().includes(query.toLowerCase()));
       }
-  
+
       if (sort === 'alphabetical') {
         results = results.sort((a, b) => a.NAME.localeCompare(b.NAME));
       }
-  
+
       if (sort === 'last_added') {
         results = results.sort((a, b) => b.ID - a.ID);
       }
@@ -159,6 +159,8 @@ function Home() {
 
     checkStoreStatus(repositories);
   }, [query, sort, repositories]);
+
+  const showMinimaStoreLink = loadedRepositories.length > 0 && loadedRepositories.some((store) => store.URL === 'https://minidapps.minima.global/data/dapps.json');
 
   return (
     <div className="relative app text-white min-h-[500px]">
@@ -282,9 +284,11 @@ function Home() {
           </div>
         </TitleBar>
         <div className="relative pt-2 p-4 flex flex-col gap-4 max-w-xl mx-auto h-full">
-          <Link to="/store/1" className="w-full">
-            <img alt="Banner" src="./assets/banner.jpg" className="w-full" />
-          </Link>
+          {showMinimaStoreLink && (
+            <Link to="/store/1" className="w-full">
+              <img alt="Banner" src="./assets/banner.jpg" className="w-full" />
+            </Link>
+          )}
           <h1 className="text-lg">My stores</h1>
           <div className="grid grid-cols-12">
             {displaySearch && (
@@ -384,17 +388,6 @@ function Home() {
               <StorePanel repository={repository} />
             </Link>
           ))}
-          {loadedRepositories.length === 0 && hasMoreThanOneStore && (
-            <div className="text-center mt-16">
-              <div className="text-lg mb-6">One or more stores could not be loaded</div>
-              <button
-                onClick={() => setDisplayAddStore(true)}
-                className="border border-white h-[48px] max-w-[172px] w-full rounded"
-              >
-                Add a store
-              </button>
-            </div>
-          )}
           {!hasMoreThanOneStore && (
             <div className="text-center mt-16">
               <div className="text-lg mb-6">You haven't added a store yet</div>
