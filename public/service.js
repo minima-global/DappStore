@@ -115,7 +115,7 @@ function main() {
                       }
                     }
                   } catch (err) {
-                    MDS.log('There was an error fetching the repo: ' + repo);
+                    // MDS.log('There was an error fetching the repo: ' + repo);
                   }
                 });
               }

@@ -393,19 +393,17 @@ function Store() {
               </svg>
             </div>
           )}
-          {params.id !== '1' && (
-            <div
-              onClick={() => setShowDeleteStore(true)}
-              className="cursor-pointer active:scale-90 absolute right-0 relative w-[36px] h-[36px] rounded-full bg-core-black-contrast-2 flex items-center justify-center"
-            >
-              <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M3.30771 18.5C2.80899 18.5 2.38303 18.3117 2.02983 17.9352C1.67661 17.5586 1.5 17.1045 1.5 16.5729V3.04211H0.5V1.44304H4.99999V0.5H11V1.44304H15.5V3.04211H14.5V16.5729C14.5 17.1114 14.325 17.5672 13.975 17.9403C13.625 18.3134 13.1974 18.5 12.6923 18.5H3.30771ZM13 3.04211H2.99998V16.5729C2.99998 16.6686 3.02883 16.7472 3.08653 16.8087C3.14423 16.8702 3.21796 16.9009 3.30771 16.9009H12.6923C12.7692 16.9009 12.8397 16.8668 12.9039 16.7984C12.968 16.7301 13 16.6549 13 16.5729V3.04211ZM5.40387 14.7688H6.90385V5.17424H5.40387V14.7688ZM9.09615 14.7688H10.5961V5.17424H9.09615V14.7688Z"
-                  fill="#A7A7B0"
-                />
-              </svg>
-            </div>
-          )}
+          <div
+            onClick={() => setShowDeleteStore(true)}
+            className="cursor-pointer active:scale-90 absolute right-0 relative w-[36px] h-[36px] rounded-full bg-core-black-contrast-2 flex items-center justify-center"
+          >
+            <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M3.30771 18.5C2.80899 18.5 2.38303 18.3117 2.02983 17.9352C1.67661 17.5586 1.5 17.1045 1.5 16.5729V3.04211H0.5V1.44304H4.99999V0.5H11V1.44304H15.5V3.04211H14.5V16.5729C14.5 17.1114 14.325 17.5672 13.975 17.9403C13.625 18.3134 13.1974 18.5 12.6923 18.5H3.30771ZM13 3.04211H2.99998V16.5729C2.99998 16.6686 3.02883 16.7472 3.08653 16.8087C3.14423 16.8702 3.21796 16.9009 3.30771 16.9009H12.6923C12.7692 16.9009 12.8397 16.8668 12.9039 16.7984C12.968 16.7301 13 16.6549 13 16.5729V3.04211ZM5.40387 14.7688H6.90385V5.17424H5.40387V14.7688ZM9.09615 14.7688H10.5961V5.17424H9.09615V14.7688Z"
+                fill="#A7A7B0"
+              />
+            </svg>
+          </div>
         </TitleBarBack>
         <div className="relative pt-2 p-4 flex flex-col gap-4 max-w-xl mx-auto">
           {data && data.banner && (

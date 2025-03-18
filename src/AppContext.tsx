@@ -6,6 +6,7 @@ import { VERSION } from './components/TermsOfUse';
 
 export const appContext = createContext<any>({});
 
+/* @ts-ignore */
 const addStore = (url: string) => {
   return new Promise<void>(async (resolve) => {
     try {
@@ -129,9 +130,10 @@ const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
            */
           sql(dbQuery).then(async() => {
 
-            await addStore('https://minidapps.minima.global/data/dapps.json');
-            await addStore('https://minidapps.minima.global/data/ecosystem-dapps.json');
-            await addStore('https://minidapps.minima.global/data/beta-test-dapps.json');
+            // do not auto add stores
+            // await addStore('https://minidapps.minima.global/data/dapps.json');
+            // await addStore('https://minidapps.minima.global/data/ecosystem-dapps.json');
+            // await addStore('https://minidapps.minima.global/data/beta-test-dapps.json');
             getRepositories();
           });
         }

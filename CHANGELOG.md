@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.0] - 18 March 25
+
+- The default Minima MiniDapp stores are no longer automatically added
+- A online check is performed to check if a valid response is returned when adding a MiniDapp Store
+
 ## [1.4.2] - 24 February 25
 
 - Minor text update to the warning message about installing a bundle of MiniDapps

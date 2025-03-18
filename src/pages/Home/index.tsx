@@ -1,7 +1,7 @@
 import TitleBar from '../../components/TitleBar';
 import Sort from '../../components/TitleBar/Sort';
 import { Link } from 'react-router-dom';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo, useState, useEffect } from 'react';
 import Modal from '../../components/UI/Modal';
 import Button from '../../components/UI/Button';
 import { downloadFile, hexToBase64, loadBinary, sql } from '../../lib';
@@ -23,6 +23,7 @@ function Home() {
   const [displayAddStore, setDisplayAddStore] = useState(false);
   const [displayOwnStore, setAddOwnStore] = useState(false);
   const [displaySettings, setDisplaySettings] = useState(false);
+  const [loadedRepositories, setLoadedRepositories] = useState<any[]>([]);
 
   const dappLinkHasError =
     dappLink !== '' &&
@@ -30,9 +31,29 @@ function Home() {
     !dappLink.includes('.json');
   const hasMoreThanOneStore = loaded && repositories.length > 0;
 
-  const addDappStore = () => {
+  const addDappStore = async () => {
     setError(null);
     setIsLoading(true);
+
+    const isOnline = await new Promise((resolve) => {
+      try {
+        MDS.net.GET(escape(dappLink), (data) => {
+          console.log(data);
+          if (data.status) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        });
+      } catch (error) {
+        resolve(false);
+      }
+    });
+
+    if (!isOnline) {
+      setIsLoading(false);
+      return setError('The store is not online, please try again later');
+    }
 
     sql(`SELECT * FROM repositories WHERE url = ${escape(dappLink)}`).then((response) => {
       if (response.count > 0) {
@@ -104,8 +125,36 @@ function Home() {
     setAddOwnStore(false);
   };
 
+  /**
+   * This checks if stores are online
+   */
+  useEffect(() => {
+    const checkStoreStatus = async () => {
+      const validStores = await Promise.all(orderedRepositories.map(async (store) => {
+        return new Promise((resolve) => {
+          try {
+            MDS.net.GET(store.URL, (data) => {
+              if (data.status) {
+                resolve(store);
+              } else {
+                resolve(null);
+              }
+            });
+          } catch (error) {
+            // do nothing if fails
+            resolve(null);
+          }
+        })
+      }));
+
+      setLoadedRepositories(validStores.filter(Boolean));
+    };
+
+    checkStoreStatus();
+  }, [orderedRepositories]);
+
   return (
-    <div className="relative app text-white">
+    <div className="relative app text-white min-h-[500px]">
       <div>
         <Modal display={displaySettings} frosted={true}>
           <Settings close={() => setDisplaySettings(false)} />
@@ -126,9 +175,8 @@ function Home() {
                   type="text"
                   value={dappLink}
                   onChange={(evt) => setDAppLink(evt.target.value)}
-                  className={`pr-10 outline-none bg-core-black-contrast-1 p-3 border-2 rounded w-full ${
-                    dappLinkHasError ? 'border-status-red' : 'border-core-black-contrast-3'
-                  }`}
+                  className={`pr-10 outline-none bg-core-black-contrast-1 p-3 border-2 rounded w-full ${dappLinkHasError ? 'border-status-red' : 'border-core-black-contrast-3'
+                    }`}
                 />
                 <div className="absolute px-1 h-full right-0 top-0 flex items-center justify-end">
                   <svg
@@ -324,11 +372,22 @@ function Home() {
               </>
             )}
           </div>
-          {orderedRepositories.map((repository) => (
+          {loadedRepositories.map((repository) => (
             <Link key={repository.ID} to={`/store/${repository.ID}`} className="overflow-hidden flex-grow lg:px-0">
               <StorePanel repository={repository} />
             </Link>
           ))}
+          {loadedRepositories.length === 0 && hasMoreThanOneStore && (
+            <div className="text-center mt-16">
+              <div className="text-lg mb-6">One or more stores could not be loaded</div>
+              <button
+                onClick={() => setDisplayAddStore(true)}
+                className="border border-white h-[48px] max-w-[172px] w-full rounded"
+              >
+                Add a store
+              </button>
+            </div>
+          )}
           {!hasMoreThanOneStore && (
             <div className="text-center mt-16">
               <div className="text-lg mb-6">You haven't added a store yet</div>
