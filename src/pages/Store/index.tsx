@@ -84,6 +84,7 @@ function Store() {
 
     sql(`DELETE FROM repositories WHERE id = ${escape(params.id)}`).then(async (response) => {
       await getRepositories();
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setIsLoading(false);
 
       if (!response.status) {

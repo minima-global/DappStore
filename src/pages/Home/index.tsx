@@ -1,7 +1,7 @@
 import TitleBar from '../../components/TitleBar';
 import Sort from '../../components/TitleBar/Sort';
 import { Link } from 'react-router-dom';
-import { useContext, useMemo, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import Modal from '../../components/UI/Modal';
 import Button from '../../components/UI/Button';
 import { downloadFile, hexToBase64, loadBinary, sql } from '../../lib';
@@ -39,7 +39,13 @@ function Home() {
       try {
         MDS.net.GET(dappLink, (data) => {
           if (data.response) {
-            resolve(true);
+            const json = JSON.parse(data.response);
+
+            if (json.name) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
           } else {
             resolve(false);
           }
@@ -84,24 +90,6 @@ function Home() {
     });
   };
 
-  const orderedRepositories = useMemo(() => {
-    let results = repositories;
-
-    if (query !== '') {
-      results = results.filter((a) => a.NAME.toLowerCase().includes(query.toLowerCase()));
-    }
-
-    if (sort === 'alphabetical') {
-      return results.sort((a, b) => a.NAME.localeCompare(b.NAME));
-    }
-
-    if (sort === 'last_added') {
-      return results.sort((a, b) => b.ID - a.ID);
-    }
-
-    return results;
-  }, [query, sort, repositories]);
-
   const downloadExample = () => {
     if (IS_MINIMA_BROWSER) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -128,16 +116,36 @@ function Home() {
    * This checks if stores are online
    */
   useEffect(() => {
-    const checkStoreStatus = async () => {
-      const validStores = await Promise.all(orderedRepositories.map(async (store) => {
+    const checkStoreStatus = async (repositories: any[]) => {
+      let results = [...repositories]; // Create a shallow copy to avoid mutating the original state
+
+      if (query !== '') {
+        results = results.filter((a) => a.NAME.toLowerCase().includes(query.toLowerCase()));
+      }
+  
+      if (sort === 'alphabetical') {
+        results = results.sort((a, b) => a.NAME.localeCompare(b.NAME));
+      }
+  
+      if (sort === 'last_added') {
+        results = results.sort((a, b) => b.ID - a.ID);
+      }
+
+      setLoadedRepositories([]);
+
+      const validStores = await Promise.all(results.map(async (store) => {
         return new Promise((resolve) => {
           try {
             MDS.net.GET(store.URL, (data) => {
-              if (data.status) {
-                resolve(store);
-              } else {
-                resolve(null);
+              if (data.response) {
+                const json = JSON.parse(data.response);
+
+                if (json.name) {
+                  return resolve(store);
+                }
               }
+
+              resolve(null);
             });
           } catch (error) {
             // do nothing if fails
@@ -149,8 +157,8 @@ function Home() {
       setLoadedRepositories(validStores.filter(Boolean));
     };
 
-    checkStoreStatus();
-  }, [orderedRepositories]);
+    checkStoreStatus(repositories);
+  }, [query, sort, repositories]);
 
   return (
     <div className="relative app text-white min-h-[500px]">
