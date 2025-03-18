@@ -37,9 +37,8 @@ function Home() {
 
     const isOnline = await new Promise((resolve) => {
       try {
-        MDS.net.GET(escape(dappLink), (data) => {
-          console.log(data);
-          if (data.status) {
+        MDS.net.GET(dappLink, (data) => {
+          if (data.response) {
             resolve(true);
           } else {
             resolve(false);
