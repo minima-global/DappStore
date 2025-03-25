@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.5.2] - 25 March 25
+
+- The description for MiniDapp stores are now correctly truncated on mobile devices
+
 ## [1.5.1] - 18 March 25
 
 - The Minima MiniDapp banner is now hidden if the Minima MiniDapp store is not reachable

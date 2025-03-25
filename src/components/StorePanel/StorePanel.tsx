@@ -16,13 +16,13 @@ function StorePanel({ repository }) {
   useEffect(() => {
     if (loaded) {
       downloadFile(repository.URL).then(function (response: any) {
-          loadBinary(response.download.file).then(function (response: any) {
-            const data = hexToBase64(response.load.data);
-            setData(data);
-          }).catch(() => {
-            // do nothing if it fails
-          })
+        loadBinary(response.download.file).then(function (response: any) {
+          const data = hexToBase64(response.load.data);
+          setData(data);
+        }).catch(() => {
+          // do nothing if it fails
         })
+      })
         .catch(() => {
           // do nothing if it fails
         });
@@ -30,16 +30,20 @@ function StorePanel({ repository }) {
   }, [loaded, repository]);
 
   return (
-    <div className="bg-core-black-contrast-2 rounded overflow-hidden flex items-stretch justify-start h-full">
+    <div className="grid grid-cols-[64px_1fr] bg-core-black-contrast-2 grow w-full rounded overflow-hidden">
       <div
         className="w-[64px] min-w-[64px] rounded bg-cover bg-no-repeat"
         style={{
           backgroundImage: `url('${repository.ICON}'), url('./assets/app.png')`,
         }}
       />
-      <div className="bg-core-black-contrast-2 grow p-3 px-4 w-full overflow-hidden">
+      <div className="bg-core-black-contrast-2 p-3 px-4 overflow-hidden w-full min-w-[0px]">
         <h5 className="font-bold mb-0.5">{repository.NAME}</h5>
-        {data.description ? <p className="text-xs text-core-grey-80 text-ellipsis truncate">{data.description}</p> : <p className="text-xs text-core-grey-80 text-ellipsis truncate">&nbsp;</p>}
+        {data.description ? (
+          <p className="text-xs text-core-grey-80 w-full text-ellipsis overflow-hidden whitespace-nowrap">{data.description}</p>
+        ) : (
+          <p className="text-xs text-core-grey-80 w-full text-ellipsis overflow-hidden whitespace-nowrap">&nbsp;</p>
+        )}
       </div>
     </div>
   );
