@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.3] - 21 September 26
+
+- The title bar no longer pushes the settings and add store buttons off screen on narrow phone screens
+- Added padding at the top and bottom of the screen for Android status and navigation bars
+
 ## [1.5.2] - 25 March 25
 
 - The description for MiniDapp stores are now correctly truncated on mobile devices

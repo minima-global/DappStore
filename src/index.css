@@ -52,11 +52,31 @@ body {
   height: 100%;
   min-height: 100vh;
   min-height: -webkit-fill-available;
+  /* keep the last row clear of the Android gesture/navigation bar */
+  padding-bottom: 24px;
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 24px);
+}
+
+/* keep the title bar clear of the Android status bar / notch */
+.safe-top {
+  padding-top: 12px;
+  padding-top: max(env(safe-area-inset-top, 0px), 12px);
 }
 
 .app {
   width: 100%;
   height: 100%;
+}
+
+/**
+ * react-slide-routes lays each page out as a grid item inside an overflow:hidden
+ * container. Without min-width:0 the item is sized to its min-content width, so on
+ * a narrow phone the page is laid out wider than the screen and the right hand side
+ * (settings, search, add store) is clipped off screen instead of fitting.
+ */
+.slide-routes > .item {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .title-bar {

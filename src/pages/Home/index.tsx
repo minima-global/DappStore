@@ -254,18 +254,19 @@ function Home() {
           </div>
         </Modal>
         <TitleBar>
-          <div className="flex flex-row gap-3">
+          <div className="flex flex-row items-center gap-3 min-w-0">
             <button
               onClick={(evt) => {
                 evt.stopPropagation();
                 setAddOwnStore(true);
               }}
-              className="w-full flex gap-3 items-center text-xs md:text-base h-[32px] md:pr-2 w-fit w-full rounded font-bold"
+              className="flex gap-3 items-center min-w-0 text-xs md:text-base h-[32px] md:pr-2 rounded font-bold"
             >
-              Create your own store
-              <img src="./assets/info.svg" />
+              {/* label only when there is room for it - the icon alone opens the same help */}
+              <span className="hidden sm:inline truncate">Create your own store</span>
+              <img className="shrink-0" src="./assets/info.svg" />
             </button>
-            <button onClick={() => setDisplaySettings(true)}>
+            <button className="shrink-0" onClick={() => setDisplaySettings(true)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
